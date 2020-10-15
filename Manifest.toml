@@ -15,6 +15,14 @@ git-tree-sha1 = "4bffea7ed1a9f0f3d1a131bbcd4b925548d75288"
 uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
 version = "0.10.9"
 
+[[Common]]
+deps = ["LinearAlgebraicRepresentation"]
+git-tree-sha1 = "840133ff4b035ecaad87a2d86098b39cc7a97408"
+repo-rev = "main"
+repo-url = "https://github.com/marteresagh/Common.jl.git"
+uuid = "1e120bc2-2bd2-483a-9663-793997b3971f"
+version = "0.1.0"
+
 [[Compat]]
 deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
 git-tree-sha1 = "b0b7e8a0d054fada22b64095b46469627a138943"
@@ -127,7 +135,7 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 deps = ["DataStructures", "Distributed", "IntervalTrees", "LinearAlgebra", "NearestNeighbors", "SparseArrays", "Triangle"]
 git-tree-sha1 = "9ed5600a0a50b497155fb48f18eee0aa5c7ceb83"
 repo-rev = "master"
-repo-url = "https://github.com/cvdlab/LinearAlgebraicRepresentation.jl.git"
+repo-url = "https://github.com/cvdlab/LinearAlgebraicRepresentation.jl"
 uuid = "95167b0c-186a-594b-a231-52369c6de044"
 version = "1.0.0"
 

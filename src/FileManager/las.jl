@@ -413,7 +413,7 @@ end
 
 
 
-function newPointRecord(point::Array{Float64,1}, rgb::Array{N0f16,1} , type::DataType, mainHeader::LasIO.LasHeader) #crea oggetto pointcloud con vertici e colori
+function newPointRecord(point::Array{Float64,1}, rgb::Array{LasIO.N0f16,1} , type::LasIO.DataType, mainHeader::LasIO.LasHeader) #crea oggetto pointcloud con vertici e colori
 
 	x = LasIO.xcoord(point[1],mainHeader)
 	y = LasIO.ycoord(point[2],mainHeader)

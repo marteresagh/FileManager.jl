@@ -1,6 +1,8 @@
 module FileManager
 
     using Common
+	using LinearAlgebraicRepresentation
+	Lar = LinearAlgebraicRepresentation
     using LasIO
     using LazIO
     using JSON
@@ -16,6 +18,7 @@ module FileManager
 			for (root,folders,files) in walkdir(name)
 				for file in files
 					head = splitdir(root)[2]
+					#@show joinpath(head,file)
 				 	include(joinpath(head,file))
 				end
 			end
