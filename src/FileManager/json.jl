@@ -397,13 +397,13 @@ end
    },
 }
 """
-function plane2json(plane::Plane, filename::String)
-	pos = plane.centroid
-	dir = plane.normal
-	position = DataStructures.OrderedDict{String,Any}("x"=>pos[1], "y"=>pos[2], "z"=>pos[3])
-	normal = DataStructures.OrderedDict{String,Any}("x"=>dir[1], "y"=>dir[2], "z"=>dir[3])
-	data = DataStructures.OrderedDict{String,Any}("object"=> "plane", "position"=>position,"normal"=>normal)
-	open(filename,"w") do f
-  		JSON.print(f, data,4)
-	end
-end
+# function plane2json(plane::Plane, filename::String)
+# 	pos = plane.centroid
+# 	dir = plane.normal
+# 	position = DataStructures.OrderedDict{String,Any}("x"=>pos[1], "y"=>pos[2], "z"=>pos[3])
+# 	normal = DataStructures.OrderedDict{String,Any}("x"=>dir[1], "y"=>dir[2], "z"=>dir[3])
+# 	data = DataStructures.OrderedDict{String,Any}("object"=> "plane", "position"=>position,"normal"=>normal)
+# 	open(filename,"w") do f
+#   		JSON.print(f, data,4)
+# 	end
+# end
