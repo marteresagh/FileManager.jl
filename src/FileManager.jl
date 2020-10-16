@@ -4,6 +4,7 @@ module FileManager
     using LasIO
     using LazIO
     using JSON
+	using DataStructures
 
 	# struct
 	include("struct.jl")
