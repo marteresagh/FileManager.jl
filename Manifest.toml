@@ -16,10 +16,10 @@ uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
 version = "0.10.9"
 
 [[Common]]
-deps = ["LinearAlgebraicRepresentation"]
-git-tree-sha1 = "840133ff4b035ecaad87a2d86098b39cc7a97408"
-repo-rev = "main"
-repo-url = "https://github.com/marteresagh/Common.jl.git"
+deps = ["Delaunay", "LinearAlgebraicRepresentation"]
+git-tree-sha1 = "6d299d63da563defb5b2bce89af44fd153a9cb2f"
+repo-rev = "master"
+repo-url = "https://github.com/marteresagh/Common.jl"
 uuid = "1e120bc2-2bd2-483a-9663-793997b3971f"
 version = "0.1.0"
 
@@ -29,16 +29,22 @@ git-tree-sha1 = "b0b7e8a0d054fada22b64095b46469627a138943"
 uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
 version = "2.2.1"
 
+[[Conda]]
+deps = ["JSON", "VersionParsing"]
+git-tree-sha1 = "7a58bb32ce5d85f8bf7559aa7c2842f9aecf52fc"
+uuid = "8f4d0f93-b110-5947-807f-2305c1781a2d"
+version = "1.4.1"
+
 [[DataAPI]]
 git-tree-sha1 = "176e23402d80e7743fc26c19c681bfb11246af32"
 uuid = "9a962f9c-6df0-11e9-0e5d-c546b8b5ee8a"
 version = "1.3.0"
 
 [[DataStructures]]
-deps = ["InteractiveUtils", "OrderedCollections"]
-git-tree-sha1 = "88d48e133e6d3dd68183309877eac74393daa7eb"
+deps = ["InteractiveUtils", "OrderedCollections", "Random", "Serialization", "Test"]
+git-tree-sha1 = "ca971f03e146cf144a9e2f2ce59674f5bf0e8038"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
-version = "0.17.20"
+version = "0.15.0"
 
 [[DataValueInterfaces]]
 git-tree-sha1 = "bfc1187b79289637fa0ef6d4436ebdfe6905cbd6"
@@ -48,6 +54,12 @@ version = "1.0.0"
 [[Dates]]
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
+
+[[Delaunay]]
+deps = ["LinearAlgebra", "PyCall", "SparseArrays", "Test"]
+git-tree-sha1 = "921f1f3d71d4f990a3f7689ee5e65677a135ad65"
+uuid = "07eb4e4e-0c6d-46ef-bc4e-83d5e5d860a9"
+version = "1.0.1"
 
 [[DelimitedFiles]]
 deps = ["Mmap"]
@@ -133,14 +145,18 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[LinearAlgebraicRepresentation]]
 deps = ["DataStructures", "Distributed", "IntervalTrees", "LinearAlgebra", "NearestNeighbors", "SparseArrays", "Triangle"]
-git-tree-sha1 = "9ed5600a0a50b497155fb48f18eee0aa5c7ceb83"
-repo-rev = "master"
-repo-url = "https://github.com/cvdlab/LinearAlgebraicRepresentation.jl"
+git-tree-sha1 = "3f15a9382a42b9821144affd3855fe6f8153c9f2"
 uuid = "95167b0c-186a-594b-a231-52369c6de044"
 version = "1.0.0"
 
 [[Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+
+[[MacroTools]]
+deps = ["Markdown", "Random"]
+git-tree-sha1 = "f7d2e3f654af75f01ec49be82c231c382214223a"
+uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
+version = "0.5.5"
 
 [[Markdown]]
 deps = ["Base64"]
@@ -183,6 +199,12 @@ uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 [[Profile]]
 deps = ["Printf"]
 uuid = "9abbd945-dff8-562f-b5e8-e1ebf5ef1b79"
+
+[[PyCall]]
+deps = ["Conda", "Dates", "Libdl", "LinearAlgebra", "MacroTools", "Serialization", "VersionParsing"]
+git-tree-sha1 = "b6dff5fa725eff4f775f472acd86756d6e31fb02"
+uuid = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+version = "1.92.1"
 
 [[REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets"]
@@ -258,3 +280,8 @@ version = "1.0.2"
 
 [[Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
+
+[[VersionParsing]]
+git-tree-sha1 = "80229be1f670524750d905f8fc8148e5a8c4537f"
+uuid = "81def892-9a0e-5fdd-b105-ffc91e053289"
+version = "1.2.0"
