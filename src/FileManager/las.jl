@@ -15,7 +15,7 @@ function las2pointcloud(fname::String...)::PointCloud
 		Vtot = hcat(Vtot,V)
 		rgbtot = hcat(rgbtot,rgb)
 	end
-	return PointCloud(V,rgbtot)
+	return PointCloud(Vtot,rgbtot)
 end
 
 """
