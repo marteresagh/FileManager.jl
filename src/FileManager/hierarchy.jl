@@ -2,18 +2,20 @@
 Trie data structures for Potree hierarchy.
 """
 function triepotree(potree::String)
-	cloud_metadata = CloudMetadata(potree) # useful parameters
-	tree = potree*"\\"*cloud_metadata.octreeDir*"\\r" # path to directory "r"
+	metadata = CloudMetadata(potree) # useful parameters
+	tree = potree*"\\"*metadata.octreeDir*"\\r" # path to directory "r"
 
 	trie = DataStructures.Trie{String}()
 
 	flushprintln("search in $tree ")
 
 	# 2.- check all file
-	if typeofpoints == "LAS"
+	if metadata.pointAttributes == "LAS"
 		files = searchfile(tree,".las")
-	elseif typeofpoints == "LAZ"
+	elseif metadata.pointAttributes == "LAZ"
 		files = searchfile(tree,".laz")
+	else
+		throw(DomainError(metadata.pointAttributes,"BIN not allowed"))
 	end
 
 	for file in files

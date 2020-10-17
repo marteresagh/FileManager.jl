@@ -1,3 +1,32 @@
+"""
+{
+    "version": "1.7",
+    "octreeDir": "data",
+    "projection": "",
+    "points": 2502516,
+    "boundingBox": {
+        "lx": 295370.8436816006,
+        "ly": 4781124.438537028,
+        "lz": 225.44601794335939,
+        "ux": 295632.16918208889,
+        "uy": 4781385.764037516,
+        "uz": 486.77151843164065
+    },
+    "tightBoundingBox": {
+        "lx": 295370.8436816006,
+        "ly": 4781124.438537028,
+        "lz": 225.44601794335939,
+        "ux": 295632.16918208889,
+        "uy": 4781376.7190012,
+        "uz": 300.3583829030762
+    },
+    "pointAttributes": "LAS",
+    "spacing": 2.2631452083587648,
+    "scale": 0.001,
+    "hierarchyStepSize": 5
+}
+"""
+
 struct CloudMetadata
     version::String
     octreeDir::String
