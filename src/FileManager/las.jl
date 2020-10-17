@@ -117,7 +117,7 @@ end
 
 
 
-function newHeader(aabb,software,sizePointRecord,npoints=0)
+function newHeader(aabb::AABB, software::String, sizePointRecord, npoints=0)
 
 	file_source_id=UInt16(0)
 	global_encoding=UInt16(0)
@@ -141,15 +141,15 @@ function newHeader(aabb,software,sizePointRecord,npoints=0)
 	x_scale=0.001
 	y_scale=0.001
 	z_scale=0.001
-	x_offset=aabb[1][1]
-	y_offset=aabb[1][2]
-	z_offset=aabb[1][3]
-	x_max=aabb[2][1]
-	x_min=aabb[1][1]
-	y_max=aabb[2][2]
-	y_min=aabb[1][2]
-	z_max=aabb[2][3]
-	z_min=aabb[1][3]
+	x_offset = aabb.x_min
+	y_offset = aabb.y_min
+	z_offset = aabb.z_min
+	x_max = aabb.x_max
+	x_min = aabb.x_min
+	y_max = aabb.y_max
+	y_min = aabb.y_min
+	z_max = aabb.z_max
+	z_min = aabb.z_min
 	variable_length_records=Vector{LasVariableLengthRecord}()
 	user_defined_bytes=Vector{UInt8}()
 
