@@ -1,104 +1,5 @@
 """
-	readcloudJSON(path::String)
-
-Read a file `.json`.
-"""
-function readcloudJSON(path::String)
-	dict=Dict{String,Any}[]
-	open(path * "\\cloud.js", "r") do f
-	    dict = JSON.parse(f)  # parse and transform data
-	end
-	dictAABB = dict["boundingBox"]
-	dicttightBB = dict["tightBoundingBox"]
-	AABB = (hcat([dictAABB["lx"],dictAABB["ly"],dictAABB["lz"]]),
-			hcat([dictAABB["ux"],dictAABB["uy"],dictAABB["uz"]]))
-	tightBB = (hcat([dicttightBB["lx"],dicttightBB["ly"],dicttightBB["lz"]]),
-				hcat([dicttightBB["ux"],dicttightBB["uy"],dicttightBB["uz"]]))
-
-	scale = dict["scale"]
-	npoints = dict["points"]
-    typeofpoints = dict["pointAttributes"]
-	octreeDir = dict["octreeDir"]
-	hierarchyStepSize = dict["hierarchyStepSize"]
-	spacing = dict["spacing"]
-	return typeofpoints,scale,npoints,AABB,tightBB,octreeDir,hierarchyStepSize,spacing
-end
-
-
-"""
-JSON struct of PC metadata.
-
-{
-   "version": "1.7",
-   "octreeDir": "data",
-   "projection": "",
-   "points": 2502516,
-   "boundingBox": {
-	   "lx": 295370.8436816006,
-	   "ly": 4781124.438537028,
-	   "lz": 225.44601794335939,
-	   "ux": 295632.16918208889,
-	   "uy": 4781385.764037516,
-	   "uz": 486.77151843164065
-   },
-   "tightBoundingBox": {
-	   "lx": 295370.8436816006,
-	   "ly": 4781124.438537028,
-	   "lz": 225.44601794335939,
-	   "ux": 295632.16918208889,
-	   "uy": 4781376.7190012,
-	   "uz": 300.3583829030762
-   },
-   "pointAttributes": "LAS",
-   "spacing": 2.2631452083587648,
-   "scale": 0.001,
-   "hierarchyStepSize": 5
- }
-"""
-function cloud_metadata(path::String)
-	dict=Dict{String,Any}[]
-	open(path * "\\cloud.js", "r") do f
-		dict = JSON.parse(f)  # parse and transform data
-	end
-	version = dict["version"]
-	if version == "1.7"
-		octreeDir = dict["octreeDir"]
-		projection = dict["projection"]
-		points = dict["points"]
-		dictAABB = dict["boundingBox"]
-		dicttightBB = dict["tightBoundingBox"]
-		boundingBox = PointClouds.AxisAlignedBoundingBox(dictAABB["ux"],dictAABB["lx"],dictAABB["uy"],dictAABB["ly"],dictAABB["uz"],dictAABB["lz"])
-		tightBoundingBox = PointClouds.AxisAlignedBoundingBox(dicttightBB["ux"],dicttightBB["lx"],dicttightBB["uy"],dicttightBB["ly"],dicttightBB["uz"],dicttightBB["lz"])
-
-		# AABB = (hcat([dictAABB["lx"],dictAABB["ly"],dictAABB["lz"]]),
-		# 		hcat([dictAABB["ux"],dictAABB["uy"],dictAABB["uz"]]))
-		# tightBB = (hcat([dicttightBB["lx"],dicttightBB["ly"],dicttightBB["lz"]]),
-		# 			hcat([dicttightBB["ux"],dicttightBB["uy"],dicttightBB["uz"]]))
-
-		pointAttributes = dict["pointAttributes"]
-		spacing = dict["spacing"]
-		scale = dict["scale"]
-		hierarchyStepSize = dict["hierarchyStepSize"]
-
-		return CloudMetadata(
-								version,
-								octreeDir,
-								projection,
-								points,
-								boundingBox,
-								tightBoundingBox,
-								pointAttributes,
-								spacing,
-								scale,
-								Int32(hierarchyStepSize)
-							)
-	end
-end
-"""
-	volumeJSON(path::String)
-
 Read a file `.json` of volume model.
-
 
 # Example of a volume file json structure.
 
@@ -125,14 +26,21 @@ Read a file `.json` of volume model.
 }
 ```
 """
-function volumeJSON(path::String)
+function json2volume(path::String)
 	dict = Dict{String,Any}[]
 
 	open(path, "r") do f
 	    dict = JSON.parse(f)  # parse and transform data
 	end
 
-	return dict["position"],dict["scale"],dict["rotation"]
+	position = dict["position"]
+	scale = dict["scale"]
+	rotation = dict["rotation"]
+
+	return Volume(  [scale["x"],scale["y"],scale["z"]],
+					[position["x"],position["y"],position["z"]],
+					[rotation["x"],rotation["y"],rotation["z"]]
+				)
 end
 
 
@@ -141,102 +49,30 @@ end
 
 Return LAR model of Potree volume tools.
 """
-function volumemodelfromjson(path::String)
-	@assert isfile(path) "volumemodelfromjson: $path not an existing file"
+function json2LARvolume(path::String)
+	@assert isfile(path) "json2LARvolume: $path not an existing file"
 
-	position, scale, rotation = PointClouds.volumeJSON(path)
-	V,(VV,EV,FV,CV) = Lar.apply(Lar.t(-0.5,-0.5,-0.5),Lar.cuboid([1,1,1],true))
-	mybox = (V,CV,FV,EV)
-	scalematrix = Lar.s(scale["x"],scale["y"],scale["z"])
-	rx = Lar.r(2*pi+rotation["x"],0,0); ry = Lar.r(0,2*pi+rotation["y"],0); rz = Lar.r(0,0,2*pi+rotation["z"])
-	rot = rx * ry * rz
-	trasl = Lar.t(position["x"],position["y"],position["z"])
-	model = Lar.Struct([trasl,rot,scalematrix,mybox])
-	return Lar.struct2lar(model) #V,CV,FV,EV
+	volume = json2volume(path)
+	return Common.volume2LARmodel(volume::Volume)
 end
 
 
 """
 Save file .JSON of the boundingbox in path.
 """
-function savebbJSON(path::String, aabb::Tuple{Array{Float64,2},Array{Float64,2}})
-	@assert isdir(path) "savebbJSON: $path not a valid directory"
-	min,max = (aabb[1],aabb[2])
-	name = splitdir(path)[2]*".json"
-	scale = DataStructures.OrderedDict{String,Any}("x"=>max[1]-min[1], "y"=>max[2]-min[2], "z"=>max[3]-min[3])
-	position = DataStructures.OrderedDict{String,Any}("x"=>(max[1]+min[1])/2, "y"=>(max[2]+min[2])/2, "z"=>(max[3]+min[3])/2)
+function save_AABB2json(folder::String, aabb::AABB)
+	@assert isdir(folder) "save_AABB2json: $path not a valid directory"
+	name = splitdir(folder)[2]
+	filename = name*".json"
+	scale = DataStructures.OrderedDict{String,Any}("x"=>aabb.x_max-aabb.x_min, "y"=>aabb.y_max-aabb.y_min, "z"=>aabb.z_max-aabb.z_min)
+	position = DataStructures.OrderedDict{String,Any}("x"=>(aabb.x_max+aabb.x_min)/2, "y"=>(aabb.y_max+aabb.y_min)/2, "z"=>(aabb.z_max+aabb.z_min)/2)
 	rotation = DataStructures.OrderedDict{String,Any}("x"=>0., "y"=>0., "z"=>0.)
 	data = DataStructures.OrderedDict{String,Any}("clip"=>true, "name"=>name,
 			"scale"=>scale,"position"=>position,"rotation"=>rotation,
 			"permitExtraction"=>true)
-	open(joinpath(path,name),"w") do f
+	open(joinpath(folder,filename),"w") do f
   		JSON.print(f, data,4)
 	end
-end
-
-
-"""
-camera parameters from JSON.
-"""
-function cameraparameters(path::String)
-	dict=Dict{String,Any}[]
-	open(path, "r") do f
-	    dict = JSON.parse(f)  # parse and transform data
-	end
-	position = dict["position"]
-	target = dict["target"]
-	return position, target
-end
-
-
-"""
-camera parameters from JSON.
-"""
-function cameramatrix(path::String)
-	dict = Dict{String,Any}[]
-	open(path, "r") do f
-	    dict = JSON.parse(f)  # parse and transform data
-	end
-	mat = dict["object"]["matrix"]
-	return [mat[1] mat[5] mat[9] mat[13];
-			mat[2] mat[6] mat[10] mat[14];
-			mat[3] mat[7] mat[11] mat[15];
-			mat[4] mat[8] mat[12] mat[16]]
-end
-
-"""
-extract verteces from area tools.
-"""
-function vertspolygonfromareaJSON(file::String)
-	dict = Dict{String,Any}[]
-	open(file, "r") do f
-	    dict = JSON.parse(f)  # parse and transform data
-	end
-	features = dict["features"]
-	for feature in features
-		type = feature["geometry"]["type"]
-		if type == "Polygon"
-			points = feature["geometry"]["coordinates"]
-			V = hcat(points[1][1:end-1]...)
-			return V
-		end
-	end
-end
-
-
-"""
-create polygon model.
-"""
-function polygon(file::String)
-	verts = vertspolygonfromareaJSON(file)
-	EV = [[i,i+1] for i in 1:size(verts,2)-1]
-	push!(EV,[size(verts,2),1])
-	axis,centroid = PointClouds.planefit(verts)
-	if Lar.dot(axis,Lar.cross(verts[:,1]-centroid,verts[:,2]-centroid))<0
-		axis = -axis
-	end
-	PointClouds.projectpointson(verts,(axis,centroid),"plane")
-	return verts,EV
 end
 
 
@@ -250,69 +86,40 @@ Read a file `.json` of UCS.
 
 ```
 {
-
 	"id":"270b6b7a-d00c-46f6-ba58-1c76310558aa",
-
 	"data":{
-
 		"plane":{
-
 			"A":0,
-
 			"B":0,
-
 			"C":0
-
 		},
-
 		"xAxis":{
-
 			"x":0.21194956712662227,
-
 			"y":-0.9771563332378362,
-
 			"z":-0.015584652964510243
-
 		},
-
 		"yAxis":{
-
 			"x":0.007193328934240251,
-
 			"y":-0.014386657868480502,
-
 			"z":0.9998706316790285
-
 		},
-
 		"zAxis":{
-
 			"x":-0.9772541312338778,
-
 			"y":-0.21203425310209192,
-
 			"z":0.003979761017532582
-
 		},
-
 		"origin":{
-
 			"x":2.250469923019409,
-
 			"y":-6.521675497293472,
-
 			"z":-1.4895449578762054
-
 		}
-
 	},
-
 	"name":"XY_PIANO_FINESTRA"
 
 }
 ```
 """
-function readUcsJSON(file::String)
+function json2ucs(file::String)
 	dict = Dict{String,Any}[]
 
 	open(file, "r") do f
@@ -322,8 +129,8 @@ function readUcsJSON(file::String)
 	return dict
 end
 
-function ucsJSON2matrix(file::String)
-	dict = readUcsJSON(file)
+function ucs2matrix(file::String)
+	dict = json2ucs(file)
 
 	origin = dict["data"]["origin"]
 	xAxis = dict["data"]["xAxis"]
@@ -382,21 +189,21 @@ function seedPointsFromFile(path::String)
 end
 
 
-"""
-{
-   "object":"plane",
-   "normal":{
-	  "x":0.000,
-	  "y":0.000,
-	  "z":1.000
-   },
-   "position":{
-      "x":0.0,
-      "y":0.0,
-      "z":0.0
-   },
-}
-"""
+# """
+# {
+#    "object":"plane",
+#    "normal":{
+# 	  "x":0.000,
+# 	  "y":0.000,
+# 	  "z":1.000
+#    },
+#    "position":{
+#       "x":0.0,
+#       "y":0.0,
+#       "z":0.0
+#    },
+# }
+# """
 # function plane2json(plane::Plane, filename::String)
 # 	pos = plane.centroid
 # 	dir = plane.normal
@@ -406,4 +213,71 @@ end
 # 	open(filename,"w") do f
 #   		JSON.print(f, data,4)
 # 	end
+# end
+
+
+
+#
+# """
+# camera parameters from JSON.
+# """
+# function cameraparameters(path::String)
+# 	dict=Dict{String,Any}[]
+# 	open(path, "r") do f
+# 	    dict = JSON.parse(f)  # parse and transform data
+# 	end
+# 	position = dict["position"]
+# 	target = dict["target"]
+# 	return position, target
+# end
+
+#
+# """
+# camera parameters from JSON.
+# """
+# function cameramatrix(path::String)
+# 	dict = Dict{String,Any}[]
+# 	open(path, "r") do f
+# 	    dict = JSON.parse(f)  # parse and transform data
+# 	end
+# 	mat = dict["object"]["matrix"]
+# 	return [mat[1] mat[5] mat[9] mat[13];
+# 			mat[2] mat[6] mat[10] mat[14];
+# 			mat[3] mat[7] mat[11] mat[15];
+# 			mat[4] mat[8] mat[12] mat[16]]
+# end
+#
+# """
+# extract verteces from area tools.
+# """
+# function vertspolygonfromareaJSON(file::String)
+# 	dict = Dict{String,Any}[]
+# 	open(file, "r") do f
+# 	    dict = JSON.parse(f)  # parse and transform data
+# 	end
+# 	features = dict["features"]
+# 	for feature in features
+# 		type = feature["geometry"]["type"]
+# 		if type == "Polygon"
+# 			points = feature["geometry"]["coordinates"]
+# 			V = hcat(points[1][1:end-1]...)
+# 			return V
+# 		end
+# 	end
+# end
+#
+#
+# """
+# create polygon model.
+# """
+# function polygon(file::String)
+# 	verts = vertspolygonfromareaJSON(file)
+# 	EV = [[i,i+1] for i in 1:size(verts,2)-1]
+# 	push!(EV,[size(verts,2),1])
+# 	axis,centroid = PointClouds.planefit(verts)
+# 	if Lar.dot(axis,Lar.cross(verts[:,1]-centroid,verts[:,2]-centroid))<0
+# 		axis = -axis
+# 	end
+# 	PointClouds.projectpointson(verts,(axis,centroid),"plane")
+# 	return verts,EV
 # end
