@@ -1,7 +1,7 @@
 """
 Trie data structures for Potree hierarchy.
 """
-function triepotree(potree::String)
+function potree2trie(potree::String)
 	metadata = CloudMetadata(potree) # useful parameters
 	tree = potree*"\\"*metadata.octreeDir*"\\r" # path to directory "r"
 
@@ -15,7 +15,7 @@ function triepotree(potree::String)
 	elseif metadata.pointAttributes == "LAZ"
 		files = searchfile(tree,".laz")
 	else
-		throw(DomainError(metadata.pointAttributes,"BIN not allowed"))
+		throw(DomainError(metadata.pointAttributes,"Format not yet allowed"))
 	end
 
 	for file in files
@@ -24,6 +24,46 @@ function triepotree(potree::String)
 	end
 
 	return trie.children['r']
+end
+
+
+
+
+"""
+
+"""
+function read_file_in_potree_folder(path::String, lev::Int, allprev=true)
+	metadata = CloudMetadata(path) # useful parameters
+	pathr = path*"\\"*metadata.octreeDir*"\\r" # path to directory "r"
+
+	println("==== Start search in $pathr ====")
+
+	# 2.- check all file
+	all_files = String[]
+
+	for (root, dirs, files) in walkdir(pathr)
+		for file in files
+			if endswith(file, ".las") || endswith(file, ".laz")
+				name = rsplit(file,".")[1]
+				level = []
+				for i in name
+					if isnumeric(i)
+						push!(level,i)
+					end
+				end
+				if !allprev
+					if length(level)==lev
+						push!(all_files,joinpath(root, file))
+					end
+				else
+					if length(level)<=lev
+						push!(all_files,joinpath(root, file))
+					end
+				end
+			end
+		end
+	end
+	return all_files
 end
 
 

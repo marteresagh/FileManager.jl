@@ -2,6 +2,7 @@ const HEADER_SIZE = 227
 const DATA_OFFSET = 227
 const SIZE_DATARECORD = 26
 
+
 """
 Read more than one file `.las` and extrapolate the LAR model and the color of each point.
 """
