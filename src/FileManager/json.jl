@@ -160,7 +160,6 @@ function ucs2matrix(file::String)
 end
 
 
-
 """
 measure JSON from Potree 1.6
 """
@@ -215,11 +214,8 @@ end
 # 	end
 # end
 
-
-
-#
 # """
-# camera parameters from JSON.
+# ============================================  CAMERA
 # """
 # function cameraparameters(path::String)
 # 	dict=Dict{String,Any}[]
@@ -231,7 +227,24 @@ end
 # 	return position, target
 # end
 
+#function viewcoordinatesystem(camera)
+#     position,target = camera
+# 	up = [0,0,1.]
+# 	dir = target-position
+# 	x = -dir/Lar.norm(dir)
+# 	if x != [0,0,1] && x != [0,0,-1]
+# 		y = Lar.cross(x,up)
+# 		z = Lar.cross(y,x)
+# 	end
+#     return [y';z';x']
+# end
 #
+#
+# function coordsystemcamera(file::String)
+#     mat = PointClouds.cameramatrix(file)
+#     return Matrix(mat[1:3,1:3]')
+# end
+
 # """
 # camera parameters from JSON.
 # """
@@ -247,6 +260,8 @@ end
 # 			mat[4] mat[8] mat[12] mat[16]]
 # end
 #
+
+# ====================================  read points for polygon
 # """
 # extract verteces from area tools.
 # """
