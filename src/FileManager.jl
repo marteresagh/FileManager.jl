@@ -17,5 +17,5 @@ module FileManager
 	include("FileManager/txt.jl")
 	include("FileManager/utilities.jl")
 
-	export triepotree, las2pointcloud, LasIO, LazIO, JSON
+	export potree2trie, las2pointcloud, LasIO, LazIO, JSON
 end # module
