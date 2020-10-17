@@ -43,7 +43,10 @@ function getmodel(bbin::Array{Float64,1})
 	return boxmodel_from_aabb(bb)
 end
 
-
+function getmodel(bbin::AABB)
+	# in questo formato gli viene passato -> bbin = [x_min y_min z_min x_max y_max z_max ]
+	return boxmodel_from_aabb(bbin)
+end
 """
 file tfw
 """
