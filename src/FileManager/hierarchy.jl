@@ -32,7 +32,7 @@ end
 """
 
 """
-function read_file_in_potree_folder(path::String, lev::Int, allprev=true)
+function get_files_in_potree_folder(path::String, lev::Int, allprev=true)
 	metadata = CloudMetadata(path) # useful parameters
 	pathr = path*"\\"*metadata.octreeDir*"\\r" # path to directory "r"
 
