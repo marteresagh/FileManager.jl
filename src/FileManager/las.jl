@@ -3,21 +3,18 @@ const DATA_OFFSET = 227
 const SIZE_DATARECORD = 26
 
 """
-	loadlas(fname::String...)::Tuple{Lar.Points,Array{LasIO.N0f16,2}}
-
 Read more than one file `.las` and extrapolate the LAR model and the color of each point.
-
 """
-function loadlas(fname::String...)::Tuple{Lar.Points,Array{Array{Int64,1},1},Array{LasIO.N0f16,2}}
+function las2pointcloud(fname::String...)::PointCloud
 	Vtot = Array{Float64,2}(undef, 3, 0)
 	rgbtot = Array{LasIO.N0f16,2}(undef, 3, 0)
 	for name in fname
-		V,VV = PointClouds.las2lar(name)
-		rgb = PointClouds.lascolor(name)
+		V = las2larpoints(name)
+		rgb = lascolor(name)
 		Vtot = hcat(Vtot,V)
 		rgbtot = hcat(rgbtot,rgb)
 	end
-	return Vtot,[[i] for i in 1:size(Vtot,2)],rgbtot
+	return PointCloud(V,rgbtot)
 end
 
 """
@@ -27,13 +24,13 @@ Read data from a file `.las`:
 - generate the LAR model `(V,VV)`
 - extrapolate color associated to each point
 """
-function las2lar(fname::String)::Tuple{Lar.Points,Array{Array{Int64,1},1}}
-	header, laspoints =  PointClouds.readpotreefile(fname)
+function las2larpoints(fname::String)::Lar.Points
+	header, laspoints = read_LAS_LAZ(fname)
 	npoints = length(laspoints)
 	x = [LasIO.xcoord(laspoints[k], header) for k in 1:npoints]
 	y = [LasIO.ycoord(laspoints[k], header) for k in 1:npoints]
 	z = [LasIO.zcoord(laspoints[k], header) for k in 1:npoints]
-	return vcat(x',y',z'), [[i] for i in 1:npoints]
+	return vcat(x',y',z')
 end
 
 """
@@ -42,16 +39,16 @@ end
 Return the AABB of the file `fname`.
 
 """
-function las2aabb(fname::String)
-	header, p =  PointClouds.readpotreefile(fname)
-	#header = read(fname, LasIO.LasHeader)
-	AABB = LasIO.boundingbox(header)
-	return reshape([AABB.xmin;AABB.ymin;AABB.zmin],(3,1)),reshape([AABB.xmax;AABB.ymax;AABB.zmax],(3,1))
+function las2aabb(fname::String)::AABB
+	header, p = read_LAS_LAZ(fname)
+	#header = LasIO.read(fname, LasIO.LasHeader)
+	aabb = LasIO.boundingbox(header)
+	return AABB(aabb.xmax, aabb.xmin, aabb.ymax, aabb.ymin, aabb.zmax, aabb.zmin)
 end
 
-function las2aabb(header::LasHeader)
-	AABB = LasIO.boundingbox(header)
-	return (hcat([AABB.xmin;AABB.ymin;AABB.zmin]),hcat([AABB.xmax;AABB.ymax;AABB.zmax]))
+function las2aabb(header::LasHeader)::AABB
+	aabb = LasIO.boundingbox(header)
+	return AABB(aabb.xmax, aabb.xmin, aabb.ymax, aabb.ymin, aabb.zmax, aabb.zmin)
 end
 
 
@@ -61,8 +58,8 @@ end
 Read data from a file `.las`:
 - extrapolate color associated to each point.
 """
-function lascolor(fname::String)::Array{LasIO.N0f16,2}
-	header, laspoints =  PointClouds.readpotreefile(fname)
+function las2color(fname::String)::Lar.Points
+	header, laspoints =  read_LAS_LAZ(fname)
 	npoints = length(laspoints)
 	type = LasIO.pointformat(header)
 	if type != LasPoint0 && type != LasPoint1
@@ -95,194 +92,26 @@ function xyz(p::LasPoint, h::LasHeader)
 end
 
 """
-	savenewlas(writefile::String,h::LasIO.LasHeader,p::LasIO.Array{LasPoint,1})
-
-save file .las in writefile.
+save file .las
 """
-function savenewlas(writefile::String,h::LasIO.LasHeader,p::LasIO.Array{LasPoint,1})
-    if ispath(writefile) #overwrite
-        rm(writefile)
+function save_new_las(filename::String,h::LasIO.LasHeader,p::LasIO.Array{LasPoint,1})
+    if ispath(filename) #overwrite
+        rm(filename)
     end
-    LasIO.FileIO.save(writefile,h,p)
+    LasIO.FileIO.save(filename,h,p)
 end
 
-"""
-	mergelas(headers,pointdata,bb,scale)
-
-Merge more file .las.
-"""
-function mergelas(headers,pointdata)
-	@assert length(headers) == length(pointdata) "mergelas: inconsistent data"
-
-	# header of merging las
-	hmerge = createheader(headers,pointdata)
-	data = LasIO.LasPoint[]
-
-	# Las point data merge
-	for i in 1:length(pointdata)
-		for p in pointdata[i]
-			laspoint = createlasdata(p,headers[i],hmerge)
-			push!(data,laspoint)
-		end
-	end
-
-	return hmerge,data
-end
 
 """
- 	createheader(headers,pointdata,bb,scale)
-
-crea header coerente con i miei punti.
+Read: LAS or LAZ.
 """
-function createheader(headers,pointdata)
-	type = pointformat(headers[1])
-	h = deepcopy(headers[1])
-	h.records_count = sum(length.(pointdata))
-	return h
-end
-
-"""
- 	createlasdata(p,h,header)
-
-Generate laspoint coerenti con il mio header (soprattutto per quanto riguarda la traslazione).
-"""
-function createlasdata(p,h::LasIO.LasHeader,mainHeader::LasIO.LasHeader)
-	type = pointformat(h)
-
-	x = LasIO.xcoord(xcoord(p,h),mainHeader)
-	y = LasIO.ycoord(ycoord(p,h),mainHeader)
-	z = LasIO.zcoord(zcoord(p,h),mainHeader)
-	intensity = p.intensity
-	flag_byte = p.flag_byte
-	raw_classification = p.raw_classification
-	scan_angle = p.scan_angle
-	user_data = p.user_data
-	pt_src_id = p.pt_src_id
-
-	if type == LasIO.LasPoint0
-		return type(x, y, z,
-					intensity, flag_byte, raw_classification,
-					scan_angle, user_data, pt_src_id
-					)
-
-	elseif type == LasIO.LasPoint1
-		gps_time = p.gps_time
-		return type(x, y, z,
-					intensity, flag_byte, raw_classification,
-					scan_angle, user_data, pt_src_id, gps_time
-					)
-
-	elseif type == LasIO.LasPoint2
-		red = p.red
-		green = p.green
-		blue = p.blue
-		return type(x, y, z,
-					intensity, flag_byte, raw_classification,
-					scan_angle, user_data, pt_src_id,
-					red, green, blue
-					)
-
-	elseif type == LasIO.LasPoint3
-		gps_time = p.gps_time
-		red = p.red
-		green = p.green
-		blue = p.blue
-		return type(x, y, z,
-					intensity, flag_byte, raw_classification,
-					scan_angle, user_data, pt_src_id, gps_time,
-					red, green, blue
-					)
-
-	end
-end
-
-"""
-	bbincremental!(coordpoint,bb)
-
-"""
-function bbincremental!(coordpoint,bb)
-
-	for i in 1:length(coordpoint)
-		if coordpoint[i] < bb[1][i]
-			bb[1][i] = coordpoint[i]
-		end
-		if coordpoint[i] > bb[2][i]
-			bb[2][i] = coordpoint[i]
-		end
-	end
-
-	return true
-end
-
-"""
-Read Potree file: LAS or LAZ.
-"""
-function readpotreefile(fname::String)
+function read_LAS_LAZ(fname::String)
 	if endswith(fname,".las")
 		header, laspoints = LasIO.FileIO.load(fname)
 	elseif endswith(fname,".laz")
 		header, laspoints = LazIO.load(fname)
 	end
 	return header,laspoints
-end
-
-
-"""
-.
-"""
-
-function set_z_zero(points::Array{LasPoint2,1},header::LasIO.LasHeader)
-	type = pointformat(header)
-	pvec = Vector{LasPoint}()
-	for p in points
-		x = p.x
-		y = p.y
-		z = 0
-		intensity = p.intensity
-		flag_byte = p.flag_byte
-		raw_classification = p.raw_classification
-		scan_angle = p.scan_angle
-		user_data = p.user_data
-		pt_src_id = p.pt_src_id
-
-		if type == LasIO.LasPoint0
-			laspoint = type(x, y, z,
-						intensity, flag_byte, raw_classification,
-						scan_angle, user_data, pt_src_id
-						)
-
-		elseif type == LasIO.LasPoint1
-			gps_time = p.gps_time
-			laspoint = type(x, y, z,
-						intensity, flag_byte, raw_classification,
-						scan_angle, user_data, pt_src_id, gps_time
-						)
-
-		elseif type == LasIO.LasPoint2
-			red = p.red
-			green = p.green
-			blue = p.blue
-			laspoint = type(x, y, z,
-						intensity, flag_byte, raw_classification,
-						scan_angle, user_data, pt_src_id,
-						red, green, blue
-						)
-
-		elseif type == LasIO.LasPoint3
-			gps_time = p.gps_time
-			red = p.red
-			green = p.green
-			blue = p.blue
-			laspoint = type(x, y, z,
-						intensity, flag_byte, raw_classification,
-						scan_angle, user_data, pt_src_id, gps_time,
-						red, green, blue
-						)
-
-		end
-		push!(pvec,laspoint)
-	end
-	return pvec
 end
 
 
@@ -360,7 +189,9 @@ function newHeader(aabb,software,sizePointRecord,npoints=0)
 	)
 end
 
+"""
 
+"""
 function newPointRecord(laspoint::LasIO.LasPoint, header::LasIO.LasHeader, type::DataType, mainHeader::LasIO.LasHeader)
 
 	x = LasIO.xcoord(xcoord(laspoint,header),mainHeader)
@@ -412,7 +243,6 @@ function newPointRecord(laspoint::LasIO.LasPoint, header::LasIO.LasHeader, type:
 end
 
 
-
 function newPointRecord(point::Array{Float64,1}, rgb::Array{LasIO.N0f16,1} , type::LasIO.DataType, mainHeader::LasIO.LasHeader) #crea oggetto pointcloud con vertici e colori
 
 	x = LasIO.xcoord(point[1],mainHeader)
@@ -462,3 +292,172 @@ function newPointRecord(point::Array{Float64,1}, rgb::Array{LasIO.N0f16,1} , typ
 	end
 
 end
+
+
+
+#
+# """
+#  	createlasdata(p,h,header)
+#
+# create LasPoint from coordinates.
+# """
+# function createlasdata(p,h::LasIO.LasHeader,mainHeader::LasIO.LasHeader)
+# 	type = pointformat(h)
+#
+# 	x = LasIO.xcoord(xcoord(p,h),mainHeader)
+# 	y = LasIO.ycoord(ycoord(p,h),mainHeader)
+# 	z = LasIO.zcoord(zcoord(p,h),mainHeader)
+# 	intensity = p.intensity
+# 	flag_byte = p.flag_byte
+# 	raw_classification = p.raw_classification
+# 	scan_angle = p.scan_angle
+# 	user_data = p.user_data
+# 	pt_src_id = p.pt_src_id
+#
+# 	if type == LasIO.LasPoint0
+# 		return type(x, y, z,
+# 					intensity, flag_byte, raw_classification,
+# 					scan_angle, user_data, pt_src_id
+# 					)
+#
+# 	elseif type == LasIO.LasPoint1
+# 		gps_time = p.gps_time
+# 		return type(x, y, z,
+# 					intensity, flag_byte, raw_classification,
+# 					scan_angle, user_data, pt_src_id, gps_time
+# 					)
+#
+# 	elseif type == LasIO.LasPoint2
+# 		red = p.red
+# 		green = p.green
+# 		blue = p.blue
+# 		return type(x, y, z,
+# 					intensity, flag_byte, raw_classification,
+# 					scan_angle, user_data, pt_src_id,
+# 					red, green, blue
+# 					)
+#
+# 	elseif type == LasIO.LasPoint3
+# 		gps_time = p.gps_time
+# 		red = p.red
+# 		green = p.green
+# 		blue = p.blue
+# 		return type(x, y, z,
+# 					intensity, flag_byte, raw_classification,
+# 					scan_angle, user_data, pt_src_id, gps_time,
+# 					red, green, blue
+# 					)
+#
+# 	end
+# end
+
+# """
+# 	bbincremental!(coordpoint,bb)
+#
+# """
+# function bbincremental!(coordpoint,bb)
+#
+# 	for i in 1:length(coordpoint)
+# 		if coordpoint[i] < bb[1][i]
+# 			bb[1][i] = coordpoint[i]
+# 		end
+# 		if coordpoint[i] > bb[2][i]
+# 			bb[2][i] = coordpoint[i]
+# 		end
+# 	end
+#
+# 	return true
+# end
+
+# """
+# .
+# """
+#
+# function set_z_zero(points::Array{LasPoint2,1},header::LasIO.LasHeader)
+# 	type = pointformat(header)
+# 	pvec = Vector{LasPoint}()
+# 	for p in points
+# 		x = p.x
+# 		y = p.y
+# 		z = 0
+# 		intensity = p.intensity
+# 		flag_byte = p.flag_byte
+# 		raw_classification = p.raw_classification
+# 		scan_angle = p.scan_angle
+# 		user_data = p.user_data
+# 		pt_src_id = p.pt_src_id
+#
+# 		if type == LasIO.LasPoint0
+# 			laspoint = type(x, y, z,
+# 						intensity, flag_byte, raw_classification,
+# 						scan_angle, user_data, pt_src_id
+# 						)
+#
+# 		elseif type == LasIO.LasPoint1
+# 			gps_time = p.gps_time
+# 			laspoint = type(x, y, z,
+# 						intensity, flag_byte, raw_classification,
+# 						scan_angle, user_data, pt_src_id, gps_time
+# 						)
+#
+# 		elseif type == LasIO.LasPoint2
+# 			red = p.red
+# 			green = p.green
+# 			blue = p.blue
+# 			laspoint = type(x, y, z,
+# 						intensity, flag_byte, raw_classification,
+# 						scan_angle, user_data, pt_src_id,
+# 						red, green, blue
+# 						)
+#
+# 		elseif type == LasIO.LasPoint3
+# 			gps_time = p.gps_time
+# 			red = p.red
+# 			green = p.green
+# 			blue = p.blue
+# 			laspoint = type(x, y, z,
+# 						intensity, flag_byte, raw_classification,
+# 						scan_angle, user_data, pt_src_id, gps_time,
+# 						red, green, blue
+# 						)
+#
+# 		end
+# 		push!(pvec,laspoint)
+# 	end
+# 	return pvec
+# end
+
+# """
+# 	mergelas(headers,pointdata,bb,scale)
+#
+# Merge more file .las.
+# """
+# function mergelas(headers,pointdata)
+# 	@assert length(headers) == length(pointdata) "mergelas: inconsistent data"
+#
+# 	# header of merging las
+# 	hmerge = createheader(headers,pointdata)
+# 	data = LasIO.LasPoint[]
+#
+# 	# Las point data merge
+# 	for i in 1:length(pointdata)
+# 		for p in pointdata[i]
+# 			laspoint = createlasdata(p,headers[i],hmerge)
+# 			push!(data,laspoint)
+# 		end
+# 	end
+#
+# 	return hmerge,data
+# end
+
+# """
+#  	createheader(headers,pointdata,bb,scale)
+#
+# crea header coerente con i miei punti.
+# """
+# function createheader(headers,pointdata)
+# 	type = pointformat(headers[1])
+# 	h = deepcopy(headers[1])
+# 	h.records_count = sum(length.(pointdata))
+# 	return h
+# end
