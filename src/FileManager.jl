@@ -14,7 +14,8 @@ module FileManager
 	include("FileManager/json.jl")
 	include("FileManager/las.jl")
 	#include("FileManager/ply.jl")
+	include("FileManager/txt.jl")
 	include("FileManager/utilities.jl")
 
-	export triepotree
+	export triepotree, las2pointcloud
 end # module

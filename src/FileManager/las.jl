@@ -10,7 +10,7 @@ function las2pointcloud(fname::String...)::PointCloud
 	rgbtot = Array{LasIO.N0f16,2}(undef, 3, 0)
 	for name in fname
 		V = las2larpoints(name)
-		rgb = lascolor(name)
+		rgb = las2color(name)
 		Vtot = hcat(Vtot,V)
 		rgbtot = hcat(rgbtot,rgb)
 	end
