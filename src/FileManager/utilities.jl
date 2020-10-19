@@ -11,7 +11,7 @@ end
 Read volume model from a file JSON.
 """
 function boxmodel_from_json(volume::String)
-	V,CV,FV,EV = volumemodelfromjson(volume)
+	V,CV,FV,EV = json2LARvolume(volume)
 	return V,EV,FV
 end
 
