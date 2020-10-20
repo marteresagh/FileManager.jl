@@ -1,3 +1,5 @@
+__precompile__()
+
 module FileManager
 
     using Common
@@ -6,7 +8,7 @@ module FileManager
     using JSON
 	using DataStructures
 	using Dates
-	
+
 	# struct
 	include("struct.jl")
 
