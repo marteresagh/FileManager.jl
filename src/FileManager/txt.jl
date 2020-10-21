@@ -21,3 +21,14 @@ function save_lines_txt(filename::String, lines::Array{Hyperplane,1}, quota = 0.
 
 	close(io)
 end
+
+"""
+"""
+#TODO da scrivire generica
+function savePlane(hyperplane::Hyperplane, filename::String)
+	# plane2json(plane::Plane, filename::String)  JSON FORMAT
+	io = open(filename,"w")
+	write(io, "$(plane.normal[1]) $(plane.normal[2]) $(plane.normal[3]) ")
+	write(io, "$(plane.centroid[1]) $(plane.centroid[2]) $(plane.centroid[3])")
+	close(io)
+end

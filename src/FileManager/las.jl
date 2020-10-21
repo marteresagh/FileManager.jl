@@ -244,7 +244,7 @@ function newPointRecord(laspoint::LasIO.LasPoint, header::LasIO.LasHeader, type:
 end
 
 
-function newPointRecord(point::Array{Float64,1}, rgb::Array{LasIO.N0f16,1} , type::LasIO.DataType, mainHeader::LasIO.LasHeader) #crea oggetto pointcloud con vertici e colori
+function newPointRecord(point::Array{Float64,1}, rgb::Array{LasIO.N0f16,1} , type::LasIO.DataType, mainHeader::LasIO.LasHeader) #crea oggetto laspoint con vertici e colori
 
 	x = LasIO.xcoord(point[1],mainHeader)
 	y = LasIO.ycoord(point[2],mainHeader)
@@ -295,6 +295,22 @@ function newPointRecord(point::Array{Float64,1}, rgb::Array{LasIO.N0f16,1} , typ
 end
 
 
+function save_pointcloud(pc::PointCloud, filename::String)
+	points = pc.coordinates
+	rgbs = pc.rgbs
+	npoints = pc.n_points
+
+	aabb = Common.boundingbox(points)
+	header = PointClouds.newHeader(aabb,"PLANEDETECTION",SIZE_DATARECORD,npoints)
+
+	pvec = Array{LasPoint,1}(undef,npoints)
+	for i in 1:npoints
+		point = PointClouds.newPointRecord(points[:,i], rgbs[:,i], LasIO.LasPoint2, header)
+		pvec[i] = point
+	end
+
+	LasIO.save(filename,header,pvec)
+end
 
 #
 # """
