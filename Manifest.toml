@@ -17,7 +17,7 @@ version = "0.10.9"
 
 [[Common]]
 deps = ["Delaunay", "LinearAlgebraicRepresentation"]
-git-tree-sha1 = "6c72e8369d792807f70f4d890605788c166a632d"
+git-tree-sha1 = "ecd287e5f4190e25bc60c708565faa9074f245a8"
 repo-rev = "master"
 repo-url = "https://github.com/marteresagh/Common.jl"
 uuid = "1e120bc2-2bd2-483a-9663-793997b3971f"
