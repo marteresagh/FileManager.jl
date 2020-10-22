@@ -301,11 +301,11 @@ function save_pointcloud(pc::PointCloud, filename::String)
 	npoints = pc.n_points
 
 	aabb = Common.boundingbox(points)
-	header = PointClouds.newHeader(aabb,"PLANEDETECTION",SIZE_DATARECORD,npoints)
+	header = newHeader(aabb,"PLANEDETECTION",SIZE_DATARECORD,npoints)
 
 	pvec = Array{LasPoint,1}(undef,npoints)
 	for i in 1:npoints
-		point = PointClouds.newPointRecord(points[:,i], rgbs[:,i], LasIO.LasPoint2, header)
+		point = newPointRecord(points[:,i], rgbs[:,i], LasIO.LasPoint2, header)
 		pvec[i] = point
 	end
 
