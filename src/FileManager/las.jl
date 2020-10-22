@@ -309,7 +309,7 @@ function save_pointcloud(pc::PointCloud, filename::String)
 		pvec[i] = point
 	end
 
-	LasIO.save(filename,header,pvec)
+	LasIO.FileIO.save(filename,header,pvec)
 end
 
 #
