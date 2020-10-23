@@ -32,3 +32,15 @@ function savePlane(hyperplane::Hyperplane, filename::String)
 	write(io, "$(plane.centroid[1]) $(plane.centroid[2]) $(plane.centroid[3])")
 	close(io)
 end
+
+
+function save_points_rgbs_txt(filename::String, PC::PointCloud)
+	io = open(filename,"w")
+	RGB = convert(Array{Int32,2},floor.(PC.rgbs*255))
+	for i in 1:PC.n_points
+		V = PC.coordinates
+		write(io, "$(V[1,i]) $(V[2,i]) $(V[3,i]) $(RGB[1,i]) $(RGB[2,i]) $(RGB[3,i])\n")
+	end
+
+	close(io)
+end

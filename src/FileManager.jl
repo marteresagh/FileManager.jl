@@ -8,7 +8,7 @@ module FileManager
     using JSON
 	using DataStructures
 	using Dates
-
+	using Printf
 	# struct
 	include("struct.jl")
 

@@ -41,8 +41,10 @@ function save_tfw(output::String, GSD::Float64, lx::Float64, uy::Float64)
 	write(io, "0.000000000000000\n")
 	write(io, "0.000000000000000\n")
 	write(io, "-$(Float64(GSD))\n")
-	write(io, "$lx\n")
-	write(io, "$uy\n")
+	L=@sprintf("%f", lx)
+	U=@sprintf("%f", uy)
+	write(io, "$L\n")
+	write(io, "$U\n")
 	close(io)
 end
 
