@@ -16,8 +16,8 @@ uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
 version = "0.10.9"
 
 [[Common]]
-deps = ["Delaunay", "LinearAlgebraicRepresentation", "NearestNeighbors"]
-git-tree-sha1 = "a44c007e7ffb04d7adfbdc89a4b86fc5d9b25f7c"
+deps = ["Delaunay", "LinearAlgebraicRepresentation", "NearestNeighbors", "Statistics"]
+git-tree-sha1 = "c5faa0143859b2da6818b2bac97677b343d107bb"
 repo-rev = "master"
 repo-url = "https://github.com/marteresagh/Common.jl"
 uuid = "1e120bc2-2bd2-483a-9663-793997b3971f"
@@ -56,10 +56,10 @@ deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 
 [[Delaunay]]
-deps = ["LinearAlgebra", "PyCall", "SparseArrays", "Test"]
-git-tree-sha1 = "921f1f3d71d4f990a3f7689ee5e65677a135ad65"
+deps = ["LinearAlgebra", "PyCall", "Random", "SparseArrays", "Test"]
+git-tree-sha1 = "e1e137a46d2752f4a1a149d53582c9b520e80c9a"
 uuid = "07eb4e4e-0c6d-46ef-bc4e-83d5e5d860a9"
-version = "1.0.1"
+version = "1.1.0"
 
 [[DelimitedFiles]]
 deps = ["Mmap"]
