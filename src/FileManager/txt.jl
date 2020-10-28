@@ -11,11 +11,12 @@ end
 """
 save points of segment by row
 """
-function save_lines_txt(filename::String, lines::Array{Hyperplane,1}, quota = 0.0)
+function save_lines_txt(filename::String, lines::Array{Hyperplane,1}, affine_matrix::Matrix)
 	io = open(filename,"w")
 	for line in lines
 		V,_ = Common.DrawLine(line,0.0)
-		V3D = vcat(V,(quota.*ones(size(V,2)))')
+		V1 = vcat(V,(zeros(size(V,2)))')
+		V3D = Common.apply_matrix(affine_matrix,V1)
 		write(io, "$(V3D[1,1]) $(V3D[2,1]) $(V3D[3,1]) $(V3D[1,2]) $(V3D[2,2]) $(V3D[3,2])\n")
 	end
 

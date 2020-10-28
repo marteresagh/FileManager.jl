@@ -295,13 +295,13 @@ function newPointRecord(point::Array{Float64,1}, rgb::Array{LasIO.N0f16,1} , typ
 end
 
 
-function save_pointcloud(pc::PointCloud, filename::String)
+function save_pointcloud(filename::String, pc::PointCloud,  software::String)
 	points = pc.coordinates
 	rgbs = pc.rgbs
 	npoints = pc.n_points
 
 	aabb = Common.boundingbox(points)
-	header = newHeader(aabb,"PLANEDETECTION",SIZE_DATARECORD,npoints)
+	header = newHeader(aabb,software,SIZE_DATARECORD,npoints)
 
 	pvec = Array{LasPoint,1}(undef,npoints)
 	for i in 1:npoints
