@@ -59,3 +59,20 @@ function searchfile(path::String,key::String)
 	end
 	return files
 end
+
+
+"""
+	clearfolder(folder::String)
+
+Clear the given `folder`.
+"""
+function clearfolder(folder::String)
+	root, dirs, files = first(walkdir(folder))
+	for dir in dirs
+		rm(joinpath(root,dir),recursive=true)
+	end
+	for file in files
+		rm(joinpath(root,file))
+	end
+	return 1
+end
