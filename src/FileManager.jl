@@ -20,6 +20,9 @@ module FileManager
 	include("FileManager/txt.jl")
 	include("FileManager/utilities.jl")
 
+	# load
+	include("Load/txt.jl")
+
 	export potree2trie, las2pointcloud, LasIO, LazIO, JSON, getmodel, CloudMetadata,
 			HEADER_SIZE, DATA_OFFSET, SIZE_DATARECORD
 end # module
