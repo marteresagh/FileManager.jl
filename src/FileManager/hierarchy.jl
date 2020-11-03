@@ -1,3 +1,4 @@
+
 """
 Trie data structures for Potree hierarchy.
 """
@@ -27,6 +28,27 @@ function potree2trie(potree::String)
 end
 
 
+"""
+ return all files at that level of potree
+"""
+function truncate_trie(trie, level, data, l = 0,all_prev = true)
+	if all_prev
+		if l<=level
+			push!(data,trie.value)
+			for key in collect(keys(trie.children))
+				truncate_trie(trie.children[key],level,data,l+1,all_prev)
+			end
+		end
+	else
+		if l==level
+			push!(data,trie.value)
+		end
+		for key in collect(keys(trie.children))
+			truncate_trie(trie.children[key],level,data,l+1,all_prev)
+		end
+	end
+	return data
+end
 
 
 """
@@ -67,6 +89,21 @@ function get_files_in_potree_folder(path::String, lev::Int, allprev=true)
 end
 
 
+
+"""
+max depth of trie
+"""
+function maxdepth(trie)
+	if length(trie.children) == 0
+		return 1
+	else
+		depth = []
+		for key in collect(keys(trie.children))
+			push!(depth,maxdepth(trie.children[key]))
+		end
+		return max(depth...)+1
+	end
+end
 
 # """
 # Read file .hrc of potree hierarchy.
