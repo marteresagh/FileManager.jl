@@ -9,7 +9,8 @@ module FileManager
 	using DataStructures
 	using Dates
 	using Printf
-	# struct
+
+	# util 
 	include("struct.jl")
 	include("utilities.jl")
 
