@@ -69,7 +69,7 @@ end
 """
 function get_files_in_potree_folder(potree::String, lev::Int, all_prev=true::Bool)
 	trie = potree2trie(potree)
-	return truncate_trie(trie, lev, [], 0, all_prev)
+	return truncate_trie(trie, lev, String[], 0, all_prev)
 end
 
 
