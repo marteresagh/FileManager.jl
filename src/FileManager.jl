@@ -10,15 +10,15 @@ module FileManager
 	using Dates
 	using Printf
 
-	# util 
+	# util
 	include("struct.jl")
 	include("utilities.jl")
 
 	# save
-	include("FileManager/json.jl")
-	include("FileManager/las.jl")
-	#include("FileManager/ply.jl")
-	include("FileManager/txt.jl")
+	include("Save/json.jl")
+	include("Save/las.jl")
+	#include("Save/ply.jl")
+	include("Save/txt.jl")
 
 
 	# load
