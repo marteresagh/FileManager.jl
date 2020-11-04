@@ -1,7 +1,7 @@
 using FileManager
 using Visualization
 
-source = "C:\\Users\\marte\\Documents\\potreeDirectory\\pointclouds\\CAVA"
+source = "C:\\Users\\marte\\Documents\\potreeDirectory\\pointclouds\\SEZIONE_LACONTEA"
 trie = FileManager.potree2trie(source)
 max_level = FileManager.max_depth(trie)
 all_files = FileManager.get_files_in_potree_folder(source,5)
