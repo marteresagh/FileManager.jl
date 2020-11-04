@@ -45,3 +45,20 @@ function save_points_rgbs_txt(filename::String, PC::PointCloud)
 
 	close(io)
 end
+
+"""
+file tfw
+"""
+function save_tfw(output::String, GSD::Float64, lx::Float64, uy::Float64)
+	fname = splitext(output)[1]
+	io = open(fname*".tfw","w")
+	write(io, "$(Float64(GSD))\n")
+	write(io, "0.000000000000000\n")
+	write(io, "0.000000000000000\n")
+	write(io, "-$(Float64(GSD))\n")
+	L=@sprintf("%f", lx)
+	U=@sprintf("%f", uy)
+	write(io, "$L\n")
+	write(io, "$U\n")
+	close(io)
+end

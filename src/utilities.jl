@@ -16,8 +16,6 @@ function boxmodel_from_json(volume::String)
 end
 
 """
-	getmodel()
-
 @override method of Common
 Return LAR model (V,EV,FV) of a box, aligned or not to axes.
 """
@@ -31,22 +29,6 @@ function Common.getmodel(bbin::Array{Float64,1})
 	return Common.boxmodel_from_aabb(bb)
 end
 
-"""
-file tfw
-"""
-function save_tfw(output::String, GSD::Float64, lx::Float64, uy::Float64)
-	fname = splitext(output)[1]
-	io = open(fname*".tfw","w")
-	write(io, "$(Float64(GSD))\n")
-	write(io, "0.000000000000000\n")
-	write(io, "0.000000000000000\n")
-	write(io, "-$(Float64(GSD))\n")
-	L=@sprintf("%f", lx)
-	U=@sprintf("%f", uy)
-	write(io, "$L\n")
-	write(io, "$U\n")
-	close(io)
-end
 
 """
 In recursive mode, search all files with key in filename.

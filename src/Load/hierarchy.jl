@@ -1,4 +1,3 @@
-
 """
 Trie data structures for Potree hierarchy.
 """
@@ -27,11 +26,25 @@ function potree2trie(potree::String)
 	return trie.children['r']
 end
 
+"""
+max depth of trie
+"""
+function max_depth(trie)
+	if length(trie.children) == 0
+		return 0
+	else
+		depth = []
+		for key in collect(keys(trie.children))
+			push!(depth,max_depth(trie.children[key]))
+		end
+		return max(depth...)+1
+	end
+end
 
 """
  return all files at that level of potree
 """
-function truncate_trie(trie, level, data, l = 0,all_prev = true)
+function truncate_trie(trie::DataStructures.Trie{String}, level::Int, data::Array{String,1}, l = 0::Int, all_prev = true::Bool)
 	if all_prev
 		if l<=level
 			push!(data,trie.value)
@@ -54,56 +67,13 @@ end
 """
 
 """
-function get_files_in_potree_folder(path::String, lev::Int, allprev=true)
-	metadata = CloudMetadata(path) # useful parameters
-	pathr = path*"\\"*metadata.octreeDir*"\\r" # path to directory "r"
-
-	println("==== Start search in $pathr ====")
-
-	# 2.- check all file
-	all_files = String[]
-
-	for (root, dirs, files) in walkdir(pathr)
-		for file in files
-			if endswith(file, ".las") || endswith(file, ".laz")
-				name = rsplit(file,".")[1]
-				level = []
-				for i in name
-					if isnumeric(i)
-						push!(level,i)
-					end
-				end
-				if !allprev
-					if length(level)==lev
-						push!(all_files,joinpath(root, file))
-					end
-				else
-					if length(level)<=lev
-						push!(all_files,joinpath(root, file))
-					end
-				end
-			end
-		end
-	end
-	return all_files
+function get_files_in_potree_folder(potree::String, lev::Int, all_prev=true::Bool)
+	trie = potree2trie(potree)
+	return truncate_trie(trie, lev, [], 0, all_prev)
 end
 
 
 
-"""
-max depth of trie
-"""
-function maxdepth(trie)
-	if length(trie.children) == 0
-		return 1
-	else
-		depth = []
-		for key in collect(keys(trie.children))
-			push!(depth,maxdepth(trie.children[key]))
-		end
-		return max(depth...)+1
-	end
-end
 
 # """
 # Read file .hrc of potree hierarchy.
