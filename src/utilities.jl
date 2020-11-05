@@ -44,6 +44,21 @@ end
 
 
 """
+create folder of prject
+"""
+function mkdir_project(folder::String, project_name::String)
+	@assert isdir(folder) "$folder not an existing folder"
+	proj_folder = joinpath(folder,project_name)
+
+	if !isdir(proj_folder)
+		mkdir(proj_folder)
+	end
+
+	return proj_folder
+end
+
+
+"""
 	clearfolder(folder::String)
 
 Clear the given `folder`.
