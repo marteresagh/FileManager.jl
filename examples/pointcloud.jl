@@ -4,8 +4,8 @@ using Visualization
 source = "C:/Users/marte/Documents/potreeDirectory/pointclouds/CAVA"
 trie = FileManager.potree2trie(source)
 max_level = FileManager.max_depth(trie)
-all_files = FileManager.get_files_in_potree_folder(source,2)
-PC = FileManager.las2pointcloud(all_files...)
+files = FileManager.get_files_in_potree_folder(source,2)
+PC = FileManager.las2pointcloud(files...)
 
 GL.VIEW(
     [
