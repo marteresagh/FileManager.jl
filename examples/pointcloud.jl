@@ -1,10 +1,10 @@
 using FileManager
 using Visualization
 
-source = "C:/Users/marte/Documents/potreeDirectory/pointclouds/CAVA"
-trie = FileManager.potree2trie(source)
+potree = "C:/Users/marte/Documents/potreeDirectory/pointclouds/CUPOLA"
+trie = FileManager.potree2trie(potree)
 max_level = FileManager.max_depth(trie)
-files = FileManager.get_files_in_potree_folder(source,2)
+files = FileManager.get_files_in_potree_folder(potree,2, true)
 PC = FileManager.las2pointcloud(files...)
 
 GL.VIEW(

@@ -98,13 +98,15 @@ function get_files(trie::DataStructures.Trie{String}, LOD::Int, data=String[]::A
 		if l==LOD
 			push!(data,trie.value)
 		end
-		for key in collect(keys(trie.children))
-			get_files(trie.children[key],LOD,data,l+1,all_prev)
+
+		if l<LOD
+			for key in collect(keys(trie.children))
+				get_files(trie.children[key],LOD,data,l+1,all_prev)
+			end
 		end
 	end
 	return data
 end
-
 
 
 # """
