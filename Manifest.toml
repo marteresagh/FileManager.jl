@@ -17,7 +17,7 @@ version = "0.10.9"
 
 [[Common]]
 deps = ["Delaunay", "LinearAlgebraicRepresentation", "NearestNeighbors", "Statistics"]
-git-tree-sha1 = "5989c686aa85d1888ce182129fe9f7c77cf8052b"
+git-tree-sha1 = "55de76d5cff3f4f9353f3ca90a436cd2972b170a"
 repo-rev = "master"
 repo-url = "https://github.com/marteresagh/Common.jl"
 uuid = "1e120bc2-2bd2-483a-9663-793997b3971f"
@@ -184,9 +184,9 @@ version = "0.12.1"
 
 [[Parsers]]
 deps = ["Dates"]
-git-tree-sha1 = "6fa4202675c05ba0f8268a6ddf07606350eda3ce"
+git-tree-sha1 = "b417be52e8be24e916e34b3d70ec2da7bdf56a68"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
-version = "1.0.11"
+version = "1.0.12"
 
 [[Pkg]]
 deps = ["Dates", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "UUIDs"]
@@ -249,9 +249,9 @@ version = "1.0.0"
 
 [[Tables]]
 deps = ["DataAPI", "DataValueInterfaces", "IteratorInterfaceExtensions", "LinearAlgebra", "TableTraits", "Test"]
-git-tree-sha1 = "24a584cf65e2cfabdadc21694fb69d2e74c82b44"
+git-tree-sha1 = "5131a624173d532299d1c7eb05341c18112b21b8"
 uuid = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
-version = "1.1.0"
+version = "1.2.1"
 
 [[Test]]
 deps = ["Distributed", "InteractiveUtils", "Logging", "Random"]
