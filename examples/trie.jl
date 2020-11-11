@@ -1,4 +1,46 @@
 using FileManager
-using Common
+using Visualization
 
-fname = "C:/Users/marte/Documents/potreeDirectory/pointclouds/CAVA"
+# potree source
+potree = "C:/Users/marte/Documents/potreeDirectory/pointclouds/CAVA"
+
+trie = FileManager.potree2trie(potree)
+depth = FileManager.max_depth(trie)
+all_files = FileManager.get_all_values(trie)
+
+PC = FileManager.las2pointcloud(all_files...)
+
+# point cloud
+GL.VIEW(
+    [
+    Visualization.points_color_from_rgb(PC.coordinates,PC.rgbs)
+    ]
+)
+
+# subtrie
+sub_trie = FileManager.sub_trie(trie,"r00")
+all_files = FileManager.get_all_values(sub_trie)
+
+PC = FileManager.las2pointcloud(all_files...)
+
+# part of point cloud
+GL.VIEW(
+    [
+    Visualization.points_color_from_rgb(PC.coordinates,PC.rgbs)
+    ]
+)
+
+# cuttrie
+cut_trie = deepcopy(trie)
+FileManager.cut_trie!(cut_trie,1)
+depth = FileManager.max_depth(cut_trie)
+all_files = FileManager.get_all_values(cut_trie)
+
+PC = FileManager.las2pointcloud(all_files...)
+
+# first level of detail of point cloud
+GL.VIEW(
+    [
+    Visualization.points_color_from_rgb(PC.coordinates,PC.rgbs)
+    ]
+)

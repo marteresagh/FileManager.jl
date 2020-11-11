@@ -45,14 +45,53 @@ function max_depth(trie::DataStructures.Trie{String})
 end
 
 """
-Return all files at that level of potree
+Cut trie.
 """
-function truncate_trie(trie::DataStructures.Trie{String}, LOD::Int, data=String[]::Array{String,1}, l = 0::Int, all_prev = true::Bool)
+function cut_trie!(trie::DataStructures.Trie{String}, LOD::Int, l = 0::Int)
+	if l >= LOD
+		empty!(trie.children)
+	end
+	for key in collect(keys(trie.children))
+		cut_trie!(trie.children[key], LOD, l+1)
+	end
+end
+
+"""
+Return a collection of all values in trie.
+"""
+function get_all_values(trie::DataStructures.Trie{String})
+	key_s = collect(keys(trie))
+	data = Array{String,1}(undef,length(key_s))
+	for i in 1:length(key_s)
+		data[i] = trie[key_s[i]]
+	end
+	return data
+end
+
+"""
+Return the subtrie with defined root.
+"""
+function sub_trie(t::DataStructures.Trie{String}, root::AbstractString)
+	return subtrie(t, root[2:end])
+end
+
+"""
+Inteface
+"""
+function get_files_in_potree_folder(potree::String, LOD::Int, all_prev=true::Bool)
+	trie = potree2trie(potree)
+	return get_files(trie, LOD, String[], 0, all_prev)
+end
+
+"""
+Accumulate all values from root to defined level.
+"""
+function get_files(trie::DataStructures.Trie{String}, LOD::Int, data=String[]::Array{String,1}, l = 0::Int, all_prev = true::Bool)
 	if all_prev
 		if l<=LOD
 			push!(data,trie.value)
 			for key in collect(keys(trie.children))
-				truncate_trie(trie.children[key],LOD,data,l+1,all_prev)
+				get_files(trie.children[key],LOD,data,l+1,all_prev)
 			end
 		end
 	else
@@ -60,21 +99,11 @@ function truncate_trie(trie::DataStructures.Trie{String}, LOD::Int, data=String[
 			push!(data,trie.value)
 		end
 		for key in collect(keys(trie.children))
-			truncate_trie(trie.children[key],LOD,data,l+1,all_prev)
+			get_files(trie.children[key],LOD,data,l+1,all_prev)
 		end
 	end
 	return data
 end
-
-
-"""
-API
-"""
-function get_files_in_potree_folder(potree::String, LOD::Int, all_prev=true::Bool)
-	trie = potree2trie(potree)
-	return truncate_trie(trie, LOD, String[], 0, all_prev)
-end
-
 
 
 
