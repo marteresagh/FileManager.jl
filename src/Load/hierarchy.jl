@@ -30,13 +30,13 @@ function potree2trie(potree::String)
 end
 
 """
-maximum depth of trie
+maximum depth of trie.
 """
-function max_depth(trie::DataStructures.Trie{String})
+function max_depth(trie::DataStructures.Trie{String})::Int
 	if length(trie.children) == 0
 		return 0
 	else
-		depth = []
+		depth = Int[]
 		for key in collect(keys(trie.children))
 			push!(depth,max_depth(trie.children[key]))
 		end
@@ -59,7 +59,7 @@ end
 """
 Return a collection of all values in trie.
 """
-function get_all_values(trie::DataStructures.Trie{String})
+function get_all_values(trie::DataStructures.Trie{String})::Array{String,1}
 	key_s = collect(keys(trie))
 	data = Array{String,1}(undef,length(key_s))
 	for i in 1:length(key_s)
@@ -71,22 +71,22 @@ end
 """
 Return the subtrie with defined root.
 """
-function sub_trie(t::DataStructures.Trie{String}, root::AbstractString)
+function sub_trie(t::DataStructures.Trie{String}, root::AbstractString)::DataStructures.Trie
 	return subtrie(t, root[2:end])
 end
 
 """
 Inteface
 """
-function get_files_in_potree_folder(potree::String, LOD::Int, all_prev=true::Bool)
+function get_files_in_potree_folder(potree::String, LOD::Int, all_prev=true::Bool)::Array{String,1}
 	trie = potree2trie(potree)
 	return get_files(trie, LOD, String[], 0, all_prev)
 end
 
 """
-Accumulate all values from root to defined level.
+Accumulate all values from root to defined level `LOD`.
 """
-function get_files(trie::DataStructures.Trie{String}, LOD::Int, data=String[]::Array{String,1}, l = 0::Int, all_prev = true::Bool)
+function get_files(trie::DataStructures.Trie{String}, LOD::Int, data=String[]::Array{String,1}, l = 0::Int, all_prev = true::Bool)::Array{String,1}
 	if all_prev
 		if l<=LOD
 			push!(data,trie.value)
