@@ -2,14 +2,15 @@
 Trie data structures for Potree hierarchy.
 """
 function potree2trie(potree::String)
-	metadata = CloudMetadata(potree) # useful parameters
+	#potree = path to potree folder project
+	metadata = CloudMetadata(potree) # metadata of potree
 	tree = potree*"\\"*metadata.octreeDir*"\\r" # path to directory "r"
 
 	trie = DataStructures.Trie{String}()
 
 	flushprintln("search in $tree ")
 
-	# 2.- check all file
+	# search all files
 	if metadata.pointAttributes == "LAS"
 		files = searchfile(tree,".las")
 	elseif metadata.pointAttributes == "LAZ"
@@ -18,18 +19,20 @@ function potree2trie(potree::String)
 		throw(DomainError(metadata.pointAttributes,"Format not yet allowed"))
 	end
 
+	# build trie from filename
 	for file in files
 		name = rsplit(splitdir(file)[2],".")[1]
 		trie[name] = file
 	end
 
+	# root of potree
 	return trie.children['r']
 end
 
 """
-max depth of trie
+maximum depth of trie
 """
-function max_depth(trie)
+function max_depth(trie::DataStructures.Trie{String})
 	if length(trie.children) == 0
 		return 0
 	else
@@ -37,27 +40,27 @@ function max_depth(trie)
 		for key in collect(keys(trie.children))
 			push!(depth,max_depth(trie.children[key]))
 		end
-		return max(depth...)+1
+		return max(depth...) + 1
 	end
 end
 
 """
- return all files at that level of potree
+Return all files at that level of potree
 """
-function truncate_trie(trie::DataStructures.Trie{String}, level::Int, data::Array{String,1}, l = 0::Int, all_prev = true::Bool)
+function truncate_trie(trie::DataStructures.Trie{String}, LOD::Int, data=String[]::Array{String,1}, l = 0::Int, all_prev = true::Bool)
 	if all_prev
-		if l<=level
+		if l<=LOD
 			push!(data,trie.value)
 			for key in collect(keys(trie.children))
-				truncate_trie(trie.children[key],level,data,l+1,all_prev)
+				truncate_trie(trie.children[key],LOD,data,l+1,all_prev)
 			end
 		end
 	else
-		if l==level
+		if l==LOD
 			push!(data,trie.value)
 		end
 		for key in collect(keys(trie.children))
-			truncate_trie(trie.children[key],level,data,l+1,all_prev)
+			truncate_trie(trie.children[key],LOD,data,l+1,all_prev)
 		end
 	end
 	return data
@@ -65,11 +68,11 @@ end
 
 
 """
-
+API
 """
-function get_files_in_potree_folder(potree::String, lev::Int, all_prev=true::Bool)
+function get_files_in_potree_folder(potree::String, LOD::Int, all_prev=true::Bool)
 	trie = potree2trie(potree)
-	return truncate_trie(trie, lev, String[], 0, all_prev)
+	return truncate_trie(trie, LOD, String[], 0, all_prev)
 end
 
 

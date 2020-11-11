@@ -1,13 +1,12 @@
-
 """
 Read more than one file `.las` and extrapolate the LAR model and the color of each point.
 """
-function las2pointcloud(fname::String...)::PointCloud
+function las2pointcloud(fnames::String...)::PointCloud
 	Vtot = Array{Float64,2}(undef, 3, 0)
 	rgbtot = Array{LasIO.N0f16,2}(undef, 3, 0)
-	for name in fname
-		V = las2larpoints(name)
-		rgb = las2color(name)
+	for fname in fnames
+		V = las2larpoints(fname)
+		rgb = las2color(fname)
 		Vtot = hcat(Vtot,V)
 		rgbtot = hcat(rgbtot,rgb)
 	end
@@ -15,14 +14,10 @@ function las2pointcloud(fname::String...)::PointCloud
 end
 
 """
-	las2lar(fname::String)::Tuple{Lar.Points,Array{LasIO.N0f16,2}}
-
-Read data from a file `.las`:
-- generate the LAR model `(V,VV)`
-- extrapolate color associated to each point
+Return coordinates of points in file.
 """
-function las2larpoints(fname::String)::Lar.Points
-	header, laspoints = read_LAS_LAZ(fname)
+function las2larpoints(file::String)::Lar.Points
+	header, laspoints = read_LAS_LAZ(file)
 	npoints = length(laspoints)
 	x = [LasIO.xcoord(laspoints[k], header) for k in 1:npoints]
 	y = [LasIO.ycoord(laspoints[k], header) for k in 1:npoints]
@@ -31,13 +26,10 @@ function las2larpoints(fname::String)::Lar.Points
 end
 
 """
-	las2aabb(fname::String)
-
-Return the AABB of the file `fname`.
-
+Return the AABB of the file.
 """
-function las2aabb(fname::String)::AABB
-	header, p = read_LAS_LAZ(fname)
+function las2aabb(file::String)::AABB
+	header, p = read_LAS_LAZ(file)
 	#header = LasIO.read(fname, LasIO.LasHeader)
 	aabb = LasIO.boundingbox(header)
 	return AABB(aabb.xmax, aabb.xmin, aabb.ymax, aabb.ymin, aabb.zmax, aabb.zmin)
@@ -50,13 +42,10 @@ end
 
 
 """
-	lascolor(fname::String)::Tuple{Lar.Points,Array{LasIO.N0f16,2}}
-
-Read data from a file `.las`:
-- extrapolate color associated to each point.
+Return color associated to each point in file.
 """
-function las2color(fname::String)::Lar.Points
-	header, laspoints =  read_LAS_LAZ(fname)
+function las2color(file::String)::Lar.Points
+	header, laspoints =  read_LAS_LAZ(file)
 	npoints = length(laspoints)
 	type = LasIO.pointformat(header)
 	if type != LasPoint0 && type != LasPoint1
