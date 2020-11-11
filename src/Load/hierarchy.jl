@@ -110,6 +110,16 @@ end
 
 
 # """
+# Trie DFS.
+# """
+# function dfs(trie)
+# 	file = t.value
+# 	for key in collect(keys(t.children))
+# 		n,nfiles = dfsextraction(t.children[key],params,s,n,nfiles,l)
+# 	end
+# end
+
+# """
 # Read file .hrc of potree hierarchy.
 # """
 # function readhrc(potree::String)
