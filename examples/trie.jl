@@ -43,3 +43,24 @@ GL.VIEW(
     Visualization.points_color_from_rgb(PC.coordinates,PC.rgbs)
     ]
 )
+
+
+# potree source CASALETTO
+potree = "C:/Users/marte/Documents/potreeDirectory/pointclouds/CASALETTO" # replace this path with local potree directory
+trie = FileManager.potree2trie(potree)
+depth = FileManager.max_depth(trie)
+
+# cuttrie
+cut_trie = deepcopy(trie)
+FileManager.cut_trie!(cut_trie,0)
+depth = FileManager.max_depth(cut_trie)
+all_files = FileManager.get_all_values(cut_trie)
+
+PC = FileManager.las2pointcloud(all_files...)
+
+# root of potree
+GL.VIEW(
+    [
+    Visualization.points_color_from_rgb(PC.coordinates,PC.rgbs)
+    ]
+)
