@@ -1,9 +1,8 @@
 using FileManager
 using Visualization
 
-# potree source
-potree = "C:/Users/marte/Documents/potreeDirectory/pointclouds/CAVA"
-
+# potree source CAVA
+potree = "C:/Users/marte/Documents/potreeDirectory/pointclouds/CAVA" # replace this path with local potree directory
 trie = FileManager.potree2trie(potree)
 depth = FileManager.max_depth(trie)
 all_files = FileManager.get_all_values(trie)

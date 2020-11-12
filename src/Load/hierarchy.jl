@@ -30,7 +30,7 @@ function potree2trie(potree::String)
 end
 
 """
-maximum depth of trie.
+Maximum depth of trie.
 """
 function max_depth(trie::DataStructures.Trie{String})::Int
 	if length(trie.children) == 0
@@ -45,14 +45,14 @@ function max_depth(trie::DataStructures.Trie{String})::Int
 end
 
 """
-Cut trie.
+Return truncated trie.
 """
 function cut_trie!(trie::DataStructures.Trie{String}, LOD::Int, l = 0::Int)
 	if l >= LOD
-		empty!(trie.children)
+		empty!(trie.children) #delete all children
 	end
 	for key in collect(keys(trie.children))
-		cut_trie!(trie.children[key], LOD, l+1)
+		cut_trie!(trie.children[key], LOD, l+1) # next level
 	end
 end
 
@@ -69,14 +69,15 @@ function get_all_values(trie::DataStructures.Trie{String})::Array{String,1}
 end
 
 """
-Return the subtrie with defined root.
+Return the subtrie with defined `root` node.
 """
 function sub_trie(t::DataStructures.Trie{String}, root::AbstractString)::DataStructures.Trie
 	return subtrie(t, root[2:end])
 end
 
+# =====================
 """
-Inteface
+Return all files at that level of potree
 """
 function get_files_in_potree_folder(potree::String, LOD::Int, all_prev=true::Bool)::Array{String,1}
 	trie = potree2trie(potree)
@@ -114,8 +115,9 @@ end
 # """
 # function dfs(trie)
 # 	file = t.value
+# 	@show file
 # 	for key in collect(keys(t.children))
-# 		n,nfiles = dfsextraction(t.children[key],params,s,n,nfiles,l)
+# 		dfs(trie.children[key])
 # 	end
 # end
 
