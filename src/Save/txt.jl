@@ -6,7 +6,13 @@ function save_points_txt(filename::String,V::Lar.Points)
 
 	for i in 1:size(V,2)
 		for j in 1:size(V,1)
-			write(io, "$(V[j,i]) ")
+
+			if j == size(V,1)
+				write(io, "$(V[j,i])")
+			else
+				write(io, "$(V[j,i]) ")
+			end
+
 		end
 		write(io, "\n")
 	end
@@ -41,7 +47,11 @@ function save_points_rgbs_txt(filename::String, PC::PointCloud)
 			write(io, "$(V[j,i]) ")
 		end
 		for j in 1:3
-			write(io, "$(RGB[j,i]) ")
+			if j == 3
+				write(io, "$(RGB[j,i])")
+			else
+				write(io, "$(RGB[j,i]) ")
+			end 
 		end
 		write(io, "\n")
 	end
