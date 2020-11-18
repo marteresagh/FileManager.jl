@@ -27,6 +27,6 @@ module FileManager
 	include("Load/json.jl")
 	include("Load/las.jl")
 
-	export potree2trie, las2pointcloud, LasIO, LazIO, JSON, getmodel, CloudMetadata,
+	export potree2trie, las2pointcloud, DataStructures, LasIO, LazIO, JSON, getmodel, CloudMetadata,
 			HEADER_SIZE, DATA_OFFSET, SIZE_DATARECORD
 end # module
