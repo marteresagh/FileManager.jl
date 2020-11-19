@@ -23,7 +23,7 @@ end
 """
 Save extrema points of segment by row.
 """
-function save_lines_txt(filename::String, lines::Array{Hyperplane,1}, affine_matrix::Matrix)
+function save_3D_lines_txt(filename::String, lines::Array{Hyperplane,1}, affine_matrix::Matrix)
 	io = open(filename,"w")
 	for line in lines
 		V,_ = Common.DrawLine(line,0.0)
@@ -34,6 +34,20 @@ function save_lines_txt(filename::String, lines::Array{Hyperplane,1}, affine_mat
 
 	close(io)
 end
+
+"""
+Save extrema points of segment by row.
+"""
+function save_2D_lines_txt(filename::String, lines::Array{Hyperplane,1})
+	io = open(filename,"w")
+	for line in lines
+		V,_ = Common.DrawLine(line,0.0)
+		write(io, "$(V[1,1]) $(V[2,1]) $(V[1,2]) $(V[2,2])\n")
+	end
+
+	close(io)
+end
+
 
 """
 Save point cloud by row: "x y z r g b".
@@ -51,7 +65,7 @@ function save_points_rgbs_txt(filename::String, PC::PointCloud)
 				write(io, "$(RGB[j,i])")
 			else
 				write(io, "$(RGB[j,i]) ")
-			end 
+			end
 		end
 		write(io, "\n")
 	end
