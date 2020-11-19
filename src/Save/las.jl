@@ -198,7 +198,13 @@ end
 Save a point cloud in las format
 """
 function save_pointcloud(filename::String, pc::PointCloud,  software::String)
-	points = pc.coordinates
+
+	if pc.dimension == 2
+		points = vcat(pc.coordinates,zeros(pc.n_points)')
+	else
+		points = pc.coordinates
+	end	
+
 	rgbs = pc.rgbs
 	npoints = pc.n_points
 
