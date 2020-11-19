@@ -7,7 +7,7 @@ function load_segment(filename::String)
     close(io)
 
     b = [tryparse.(Float64,split(LINES[i], " ")) for i in 1:length(LINES)]
-    dim = length(b[1])/2
+    dim = Int(length(b[1])/2)
     V = hcat(reshape.(b,dim,2)...)
     EV = [[i,i+1] for i in range(1, size(V,2), step=2)]
     return V,EV
