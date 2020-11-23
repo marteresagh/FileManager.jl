@@ -7,9 +7,9 @@ Potree project metadata:
  - pointAttributes: declares the format of points. It can be LAS, LAZ or in the case of binary format it contains an array of attributes such as `["POSITION_CARTESIAN", "COLOR_PACKED", "INTENSITY"]`,
  - spacing: spacing value at the root node,
  - hierarchyStepSize: the number of levels in each chunk.
- 
-# Example
 
+# Example
+```
 {
     "version": "1.7",
     "octreeDir": "data",
@@ -36,6 +36,7 @@ Potree project metadata:
     "scale": 0.001,
     "hierarchyStepSize": 5
 }
+```
 
 # Fields
 ```jldoctest

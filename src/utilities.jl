@@ -20,6 +20,7 @@ Return LAR model (V,EV,FV) of a box, aligned or not to axes.
 """
 # overload method of Common
 function Common.getmodel(bbin::String)
+	# path of voume json
 	return boxmodel_from_json(bbin)
 end
 

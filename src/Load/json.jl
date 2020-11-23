@@ -1,4 +1,6 @@
 """
+json2volume(path::String)
+
 Read a file `.json` of volume model.
 
 # Example of a volume file json structure.
@@ -45,7 +47,7 @@ end
 
 
 """
-	volumemodelfromjson(path::String)
+	json2LARvolume(path::String)
 
 Return LAR model of Potree volume tools.
 """
@@ -58,7 +60,7 @@ end
 
 
 """
-	ucsJSON(path::String)
+	json2ucs(file::String)
 
 Read a file `.json` of UCS.
 

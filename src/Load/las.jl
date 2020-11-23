@@ -1,4 +1,6 @@
 """
+las2pointcloud(fnames::String...) -> PointCloud
+
 Read more than one file `.las` and extrapolate the LAR model and the color of each point.
 """
 function las2pointcloud(fnames::String...)::PointCloud
