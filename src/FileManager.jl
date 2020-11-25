@@ -18,7 +18,7 @@ module FileManager
 	# save
 	include("Save/json.jl")
 	include("Save/las.jl")
-	#include("Save/ply.jl")
+	include("Save/ply.jl")
 	include("Save/txt.jl")
 
 
@@ -26,6 +26,7 @@ module FileManager
 	include("Load/hierarchy.jl")
 	include("Load/txt.jl")
 	include("Load/json.jl")
+	include("Load/ply.jl")
 	include("Load/las.jl")
 
 	export potree2trie, las2pointcloud, DataStructures, LasIO, LazIO, JSON, getmodel, CloudMetadata,
