@@ -192,6 +192,11 @@ version = "1.0.12"
 deps = ["Dates", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "UUIDs"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 
+[[PlyIO]]
+git-tree-sha1 = "8a3c809e929f255c46e8a0f9bca2174b8c51fbd2"
+uuid = "42171d58-473b-503a-8d5f-782019eb09ec"
+version = "1.1.0"
+
 [[Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"

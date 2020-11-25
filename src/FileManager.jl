@@ -6,6 +6,7 @@ module FileManager
     using LasIO
     using LazIO
     using JSON
+	using PlyIO
 	using DataStructures
 	using Dates
 	using Printf
