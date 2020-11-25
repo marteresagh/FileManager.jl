@@ -11,11 +11,11 @@ function ply2pointcloud(filename::String)
                         push!(V,ply["vertex"][prop])
                 elseif prop == "z"
                         push!(V,ply["vertex"][prop])
-                elseif prop == "r"
+                elseif prop == "red"
                         push!(rgbs,ply["vertex"][prop])
-                elseif prop == "g"
+                elseif prop == "green"
                         push!(rgbs,ply["vertex"][prop])
-                elseif prop == "b"
+                elseif prop == "blue"
                         push!(rgbs,ply["vertex"][prop])
                 end
         end
