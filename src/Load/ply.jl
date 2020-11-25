@@ -23,6 +23,9 @@ function ply2pointcloud(filename::String)
 
         if !isempty(rgbs)
                 rgbs = convert(Matrix,hcat(rgbs...)')
+                if isinteger(rgbs[1,1])
+                        rgbs/=255
+                end
                 return PointCloud(coords,rgbs)
         end
 

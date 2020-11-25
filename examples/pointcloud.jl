@@ -9,10 +9,6 @@ PC = FileManager.las2pointcloud(files...)
 
 GL.VIEW(
     [
-    Visualization.points_color_from_rgb(PC.coordinates,PC.rgbs)
+    Visualization.points_color_from_rgb(PC.coordinates, PC.rgbs)
     ]
 )
-
-
-source = "C:/Users/marte/Documents/GEOWEB/pointclouds/nuova_nuvola.ply"
-PC = FileManager.ply2pointcloud(source)
