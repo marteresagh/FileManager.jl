@@ -1,5 +1,5 @@
 """
-las2pointcloud(fnames::String...) -> PointCloud
+	las2pointcloud(fnames::String...) -> PointCloud
 
 Read more than one file `.las` and extrapolate the LAR model and the color of each point.
 """
@@ -16,7 +16,9 @@ function las2pointcloud(fnames::String...)::PointCloud
 end
 
 """
-Return coordinates of points in file.
+	las2larpoints(file::String) -> Lar.Points
+
+Return coordinates of points in LAS file.
 """
 function las2larpoints(file::String)::Lar.Points
 	header, laspoints = read_LAS_LAZ(file)
@@ -28,7 +30,9 @@ function las2larpoints(file::String)::Lar.Points
 end
 
 """
-Return the AABB of the file.
+	las2aabb(file::String) -> AABB
+
+Return LAS file's bounding box.
 """
 function las2aabb(file::String)::AABB
 	header, p = read_LAS_LAZ(file)
@@ -44,7 +48,9 @@ end
 
 
 """
-Return color associated to each point in file.
+	las2color(file::String)::Lar.Points
+
+Return color, rgb, associated to each point in LAS file.
 """
 function las2color(file::String)::Lar.Points
 	header, laspoints =  read_LAS_LAZ(file)
@@ -59,6 +65,11 @@ function las2color(file::String)::Lar.Points
 	return rgbtot = Array{LasIO.N0f16,2}(undef, 3, 0)
 end
 
+"""
+	color(p::LasPoint, header::LasHeader)
+
+Return color of one point in LAS file.
+"""
 function color(p::LasPoint, header::LasHeader)
 	type = LasIO.pointformat(header)
 	if type != LasPoint0 && type != LasPoint1
@@ -73,7 +84,7 @@ end
 """
 	 xyz(p::LasPoint, h::LasHeader)
 
-Return coords of this laspoint p.
+Return coords of this point `p`.
 """
 function xyz(p::LasPoint, h::LasHeader)
 	return [LasIO.xcoord(p, h); LasIO.ycoord(p, h); LasIO.zcoord(p, h)]
@@ -81,7 +92,9 @@ end
 
 
 """
-Read point cloud files.
+	read_LAS_LAZ(fname::String)
+
+Read point cloud files: LAS or LAZ.
 """
 function read_LAS_LAZ(fname::String)
 	if endswith(fname,".las")

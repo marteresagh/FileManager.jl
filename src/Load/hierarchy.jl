@@ -1,14 +1,19 @@
 """
-Trie data structures for Potree hierarchy.
+	potree2trie(potree::String)
+
+Trie data structures for Potree hierarchy:
+ - each file in octree directory is stored in a node,
+ - first node is `r`, root of potree.
 """
 function potree2trie(potree::String)
 	#potree = path to potree folder project
 	metadata = CloudMetadata(potree) # metadata of potree
-	tree = potree*"\\"*metadata.octreeDir*"\\r" # path to directory "r"
+	tree = joinpath(potree,metadata.octreeDir,"r") # path to octree files
 
 	trie = DataStructures.Trie{String}()
 
-	flushprintln("search in $tree ")
+	flushprintln(" ")
+	flushprintln("Search in $tree")
 
 	# search all files
 	if metadata.pointAttributes == "LAS"
@@ -30,6 +35,8 @@ function potree2trie(potree::String)
 end
 
 """
+	max_depth(trie::DataStructures.Trie{String}) -> Int
+
 Maximum depth of trie.
 """
 function max_depth(trie::DataStructures.Trie{String})::Int
@@ -45,6 +52,8 @@ function max_depth(trie::DataStructures.Trie{String})::Int
 end
 
 """
+	cut_trie!(trie::DataStructures.Trie{String}, LOD::Int, l = 0::Int)
+
 Return truncated trie.
 """
 function cut_trie!(trie::DataStructures.Trie{String}, LOD::Int, l = 0::Int)
@@ -57,6 +66,8 @@ function cut_trie!(trie::DataStructures.Trie{String}, LOD::Int, l = 0::Int)
 end
 
 """
+	get_all_values(trie::DataStructures.Trie{String}) -> Array{String,1}
+
 Return a collection of all values in trie.
 """
 function get_all_values(trie::DataStructures.Trie{String})::Array{String,1}
@@ -69,6 +80,8 @@ function get_all_values(trie::DataStructures.Trie{String})::Array{String,1}
 end
 
 """
+	sub_trie(t::DataStructures.Trie{String}, root::AbstractString) -> DataStructures.Trie
+
 Return the subtrie with defined `root` node.
 """
 function sub_trie(t::DataStructures.Trie{String}, root::AbstractString)::DataStructures.Trie
