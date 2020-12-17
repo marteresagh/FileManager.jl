@@ -88,8 +88,8 @@ generate input point cloud
 function source2pc(source::String, lod::Union{Nothing,Int64})
 
 	if isdir(source) # se source è un potree
-		Detection.flushprintln("Potree struct")
-		cloud_metadata = Detection.CloudMetadata(source)
+		flushprintln("Potree struct")
+		cloud_metadata = CloudMetadata(source)
 
 		if lod == -1
 			trie = potree2trie(source)
