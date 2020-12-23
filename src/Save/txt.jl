@@ -21,6 +21,29 @@ function save_points_txt(filename::String,V::Lar.Points)
 end
 
 """
+Save cells by row in file .txt.
+"""
+function save_cells_txt(filename::String,EV::Lar.Cells)
+	io = open(filename,"w")
+	dim_cell = length(EV[1])
+
+	for i in 1:length(EV)
+		for j in 1:dim_cell
+
+			if j == dim_cell
+				write(io, "$(EV[i][j])")
+			else
+				write(io, "$(EV[i][j]) ")
+			end
+
+		end
+		write(io, "\n")
+	end
+
+	close(io)
+end
+
+"""
 Save extrema points of segment by row.
 """
 function save_3D_lines_txt(filename::String, lines::Array{Hyperplane,1}, affine_matrix::Matrix)

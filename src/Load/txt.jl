@@ -25,3 +25,15 @@ function load_points(filename::String)::Lar.Points
     V = hcat(b...)
     return V
 end
+
+"""
+Return cells from file.
+"""
+function load_cells(filename::String)::Lar.Cells
+    io = open(filename, "r")
+    cells = readlines(io)
+    close(io)
+
+    b = [tryparse.(Int64,split(cells[i], " ")) for i in 1:length(cells)]
+    return b
+end
