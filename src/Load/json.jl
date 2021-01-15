@@ -55,7 +55,7 @@ function json2LARvolume(path::String)
 	@assert isfile(path) "json2LARvolume: $path not an existing file"
 
 	volume = json2volume(path)
-	return Common.volume2LARmodel(volume::Volume)
+	return Common.getmodel(volume::Volume)
 end
 
 
