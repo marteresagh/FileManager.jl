@@ -27,7 +27,7 @@ end
 function Common.getmodel(bbin::Array{Float64,1})
 	# in questo formato gli viene passato -> bbin = [x_min y_min z_min x_max y_max z_max ]
 	bb = AABB(bbin[4], bbin[1], bbin[5], bbin[2], bbin[6], bbin[3])
-	return Common.boxmodel_from_aabb(bb)
+	return Common.getmodel(bb)
 end
 
 
