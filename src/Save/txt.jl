@@ -116,11 +116,46 @@ end
 
 """
 """
-#TODO da scrivire generica
-function savePlane(hyperplane::Hyperplane, filename::String)
-	# plane2json(plane::Plane, filename::String)  JSON FORMAT
+function save_hyperplane(filename::String, hyperplane::Hyperplane)
+	V = hyperplane.inliers.coordinates
+	dir = hyperplane.direction
+	cen = hyperplane.centroid
+	dim = length(dir)
+
 	io = open(filename,"w")
-	write(io, "$(plane.normal[1]) $(plane.normal[2]) $(plane.normal[3]) ")
-	write(io, "$(plane.centroid[1]) $(plane.centroid[2]) $(plane.centroid[3])")
+
+	for j in 1:dim
+		if j == dim
+			write(io, "$(dir[j])")
+		else
+			write(io, "$(dir[j]) ")
+		end
+	end
+
+	write(io, "\n")
+
+	for j in 1:dim
+		if j == dim
+			write(io, "$(cen[j])")
+		else
+			write(io, "$(cen[j]) ")
+		end
+	end
+
+	write(io, "\n")
+
+	for i in 1:size(V,2)
+		for j in 1:size(V,1)
+
+			if j == size(V,1)
+				write(io, "$(V[j,i])")
+			else
+				write(io, "$(V[j,i]) ")
+			end
+
+		end
+		write(io, "\n")
+	end
+
 	close(io)
 end

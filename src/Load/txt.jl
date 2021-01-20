@@ -37,3 +37,16 @@ function load_cells(filename::String)::Lar.Cells
     b = [tryparse.(Int64,split(cells[i], " ")) for i in 1:length(cells)]
     return b
 end
+
+
+function load_hyperplane(filename::String)::Hyperplane
+    io = open(filename, "r")
+    point = readlines(io)
+    close(io)
+
+    b = [tryparse.(Float64,split(point[i], " ")) for i in 1:length(point)]
+    V = hcat(b...)
+
+    hyperplane = Hyperplane(PointCloud(V[:,3:end]), V[:,1],V[:,2])
+    return hyperplane
+end
