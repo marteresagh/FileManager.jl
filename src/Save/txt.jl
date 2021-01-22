@@ -159,3 +159,15 @@ function save_hyperplane(filename::String, hyperplane::Hyperplane)
 
 	close(io)
 end
+
+
+"""
+	successful(test::Bool,folder::String; message=""::String)
+"""
+function successful(test::Bool,folder::String; message=""::String)
+	if test
+		io = open(joinpath(folder,"execution.prob"),"w")
+		write(io, message)
+		close(io)
+	end
+end
