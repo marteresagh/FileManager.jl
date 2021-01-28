@@ -139,7 +139,7 @@ end
 # """
 function readhrc(potree::String)
 
-	cloudmetadata = CloudMetadata(potree) # useful parameters togli quelli che non usi
+	cloudmetadata = CloudMetadata(potree)
 	tree = joinpath(potree,cloudmetadata.octreeDir,"r") # path to directory "r"
 	hrcs = searchfile(tree,".hrc")
 

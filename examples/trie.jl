@@ -3,7 +3,7 @@ using Visualization
 
 # potree source CAVA
 potree = "C:/Users/marte/Documents/potreeDirectory/pointclouds/CAVA" # replace this path with local potree directory
-
+# FileManager.readhrc(potree)
 trie = FileManager.potree2trie(potree)
 depth = FileManager.max_depth(trie)
 all_files = FileManager.get_all_values(trie)

@@ -166,7 +166,7 @@ end
 """
 function successful(test::Bool,folder::String; message=""::String)
 	if test
-		io = open(joinpath(folder,"execution.prob"),"w")
+		io = open(joinpath(folder,"execution.probe"),"w")
 		write(io, message)
 		close(io)
 	end
