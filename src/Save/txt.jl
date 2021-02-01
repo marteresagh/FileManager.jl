@@ -162,6 +162,18 @@ end
 
 
 """
+	 write_line(s_2d::IOStream, s_3d::IOStream, line::Hyperplane, affine_matrix::Matrix)
+"""
+function write_line(s_2d::IOStream, s_3d::IOStream, line::Hyperplane, affine_matrix::Matrix)
+	V,_ = Common.DrawLines(line,0.0)
+	write(s_2d, "$(V[1,1]) $(V[2,1]) $(V[1,2]) $(V[2,2])\n")
+	V1 = vcat(V,(zeros(size(V,2)))')
+	V3D = Common.apply_matrix(affine_matrix,V1)
+	write(s_3d, "$(V3D[1,1]) $(V3D[2,1]) $(V3D[3,1]) $(V3D[1,2]) $(V3D[2,2]) $(V3D[3,2])\n")
+end
+
+
+"""
 	successful(test::Bool,folder::String; message=""::String)
 """
 function successful(test::Bool,folder::String; message=""::String)
@@ -170,4 +182,35 @@ function successful(test::Bool,folder::String; message=""::String)
 		write(io, message)
 		close(io)
 	end
+end
+
+"""
+
+"""
+function save_finite_plane(folder::String, hyperplane::Hyperplane)
+	inliers = hyperplane.inliers.coordinates
+	dir = hyperplane.direction
+	cen = hyperplane.centroid
+	plane = Plane(dir,cen)
+
+	obb = oriented_boundingbox(inliers)
+	extent = obb.scale
+	center = obb.position
+	euler = obb.rotation
+
+	io = open(joinpath(folder,"finite_plane.txt"),"w")
+
+	# plane
+	write(io, "$(plane.a) $(plane.b) $(plane.c) $(plane.d)\n")
+	# extent
+	write(io, "$(extent[1]) $(extent[2]) $(extent[3])\n")
+	# position
+	write(io, "$(center[1]) $(center[2]) $(center[3])\n")
+	# euler angles
+	write(io, "$(euler[1]) $(euler[2]) $(euler[3])\n")
+
+	close(io)
+
+	save_points_rgbs_txt(joinpath(folder,"inliers.txt"), hyperplane.inliers)
+
 end
