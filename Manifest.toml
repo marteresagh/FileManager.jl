@@ -23,7 +23,7 @@ version = "0.10.9"
 
 [[Common]]
 deps = ["Delaunay", "LightGraphs", "LinearAlgebraicRepresentation", "NearestNeighbors", "SparseArrays", "Statistics"]
-git-tree-sha1 = "89b419ad7922e9b3f37b020f440d0fcfe04606d2"
+git-tree-sha1 = "2b6da4b67753be879937f13beaa4ec17a93795f1"
 repo-rev = "master"
 repo-url = "https://github.com/marteresagh/Common.jl"
 uuid = "1e120bc2-2bd2-483a-9663-793997b3971f"
