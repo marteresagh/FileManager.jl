@@ -185,7 +185,7 @@ function successful(test::Bool,folder::String; message=""::String)
 end
 
 """
-
+	save_finite_plane(folder::String, hyperplane::Hyperplane)
 """
 function save_finite_plane(folder::String, hyperplane::Hyperplane)
 	inliers = hyperplane.inliers.coordinates
@@ -193,7 +193,7 @@ function save_finite_plane(folder::String, hyperplane::Hyperplane)
 	cen = hyperplane.centroid
 	plane = Plane(dir,cen)
 
-	obb = oriented_boundingbox(inliers)
+	obb = Common.oriented_boundingbox(inliers)
 	extent = obb.scale
 	center = obb.position
 	euler = obb.rotation
