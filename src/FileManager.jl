@@ -29,6 +29,6 @@ module FileManager
 	include("Load/ply.jl")
 	include("Load/las.jl")
 
-	export potree2trie, las2pointcloud, DataStructures, LasIO, LazIO, JSON, getmodel, CloudMetadata,
+	export potree2trie, las2pointcloud, DataStructures, LasIO, LazIO, JSON, getmodel, CloudMetadata, Dates
 			HEADER_SIZE, DATA_OFFSET, SIZE_DATARECORD
 end # module
