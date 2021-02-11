@@ -228,10 +228,10 @@ function save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cell
 		path = dfs_tree(subgraph, 1)
 		edges = topological_sort_by_dfs(path)
 		inds = vmap[edges]
-		for ind in inds
+		for ind in inds[1:end-1]
 			write(io,"$ind ")
 		end
-		write(io,"\n")
+		write(io,"$(inds[end])\n")
 	end
 	close(io)
 end
