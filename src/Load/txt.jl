@@ -50,3 +50,20 @@ function load_hyperplane(filename::String)::Hyperplane
     hyperplane = Hyperplane(PointCloud(V[:,3:end]), V[:,1],V[:,2])
     return hyperplane
 end
+
+"""
+Load
+"""
+function load_connected_components(filename::String)
+	EV = Array{Int64,1}[]
+	io = open(filename, "r")
+    conn_comps = readlines(io)
+    close(io)
+	for comp in conn_comps
+		for i in 1:(length(comp)-1)
+			push!(EV, [comp[i],comp[i+1]])
+		end
+		push!(EV,[comp[end],comp[1]])
+	end
+	return EV
+end

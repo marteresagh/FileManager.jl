@@ -1,3 +1,4 @@
+
 """
 Save points by row in file .txt.
 """
@@ -213,4 +214,24 @@ function save_finite_plane(folder::String, hyperplane::Hyperplane)
 
 	save_points_rgbs_txt(joinpath(folder,"inliers.txt"), hyperplane.inliers)
 
+end
+
+"""
+
+"""
+function save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cells)
+	io = open(filename,"w")
+	g = Common.model2graph(V,EV)
+	conn_comps = connected_components(g)
+	for comp in conn_comps
+		subgraph,vmap = induced_subgraph(g, comp)
+		path = dfs_tree(subgraph, 1)
+		edges = topological_sort_by_dfs(path)
+		inds = vmap[edges]
+		for ind in inds
+			write(io,"$ind ")
+		end
+		write(io,"\n")
+	end
+	close(io)
 end
