@@ -224,9 +224,9 @@ function save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cell
 	g = Common.model2graph(V,EV)
 	conn_comps = Common.LightGraphs.connected_components(g)
 	for comp in conn_comps
-		subgraph,vmap = induced_subgraph(g, comp)
-		path = dfs_tree(subgraph, 1)
-		edges = topological_sort_by_dfs(path)
+		subgraph,vmap = Common.LightGraphs.induced_subgraph(g, comp)
+		path = Common.LightGraphs.dfs_tree(subgraph, 1)
+		edges = Common.LightGraphs.topological_sort_by_dfs(path)
 		inds = vmap[edges]
 		for ind in inds[1:end-1]
 			write(io,"$ind ")
