@@ -222,7 +222,7 @@ end
 function save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cells)
 	io = open(filename,"w")
 	g = Common.model2graph(V,EV)
-	conn_comps = connected_components(g)
+	conn_comps = Common.LightGraphs.connected_components(g)
 	for comp in conn_comps
 		subgraph,vmap = induced_subgraph(g, comp)
 		path = dfs_tree(subgraph, 1)
