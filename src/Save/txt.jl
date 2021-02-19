@@ -221,17 +221,21 @@ end
 """
 function save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cells)
 	io = open(filename,"w")
-	g = Common.model2graph(V,EV)
+
+	g = Common.makes_direct(V,EV,1)
+
 	conn_comps = Common.LightGraphs.connected_components(g)
 	for comp in conn_comps
-		subgraph,vmap = Common.LightGraphs.induced_subgraph(g, comp)
-		path = Common.LightGraphs.dfs_tree(subgraph, 1)
-		edges = Common.LightGraphs.topological_sort_by_dfs(path)
-		inds = vmap[edges]
-		for ind in inds[1:end-1]
-			write(io,"$ind ")
+		subgraph,vmap = LightGraphs.induced_subgraph(g, comp)
+		cycles = LightGraphs.simplecycles(subgraph)
+		for cycle in cycles
+			inds = vmap[cycle]
+			for ind in inds[1:end-1]
+				write(io,"$ind ")
+			end
+			write(io,"$(inds[end])\n")
 		end
-		write(io,"$(inds[end])\n")
 	end
+
 	close(io)
 end
