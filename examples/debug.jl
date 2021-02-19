@@ -55,25 +55,8 @@ i = 1
 hyperplane = hyperplanes[i]
 plane = Plane(hyperplane.direction,hyperplane.centroid)
 points = Common.apply_matrix(plane.matrix,hyperplane.inliers.coordinates)[1:2,:]
-
-GL.VIEW([
-	#GL.GLPoints(convert(Lar.Points,Common.apply_matrix(Lar.t(-centroid...),W)')),
-	GL.GLGrid(Common.apply_matrix(Lar.t(-centroid...),W),EW,GL.COLORS[1],1.0),
-])
-
-V,FV = Common.DrawPlanes(hyperplanes, nothing, 0.0)
-
-GL.VIEW([
-	#Visualization.points_color_from_rgb(Common.apply_matrix(Lar.t(-centroid...),INPUT_PC.coordinates),INPUT_PC.rgbs),
-	#GL.GLGrid(Common.apply_matrix(Lar.t(-centroid...),V),FV,GL.COLORS[1],0.8),
-	GL.GLPoints(convert(Lar.Points,points'))
-])
-
-
-
 DT = Common.delaunay_triangulation(points)
 filtration = AlphaStructures.alphaFilter(points,DT);
-threshold = 0.5
 threshold = Common.estimate_threshold(hyperplanes[1].inliers,5)
 _, _, FV = AlphaStructures.alphaSimplex(points, filtration, threshold)
 
@@ -87,25 +70,6 @@ GL.VIEW([
 	#GL.GLPoints(convert(Lar.Points,Common.apply_matrix(Lar.t(-centroid...),points)'))
 ])
 
-
-# bug salvataggio o caricamento delle componenti
-
-function indici(V,EV)
-	indices = []
-	g = Common.model2graph(V,EV)
-	conn_comps = Common.LightGraphs.connected_components(g)
-	for comp in conn_comps
-		subgraph,vmap = Common.LightGraphs.induced_subgraph(g, comp)
-		path = Common.LightGraphs.dfs_tree(subgraph, 1)
-		edges = Common.LightGraphs.topological_sort_by_dfs(path)
-		inds = vmap[edges]
-		push!(indices,inds)
-	end
-	return indices
-end
-
-# problemi di componenti connesse in questi casi molto sporchi
-indices = indici(V,EV)
 FileManager.save_connected_components("prova.txt", V,EV)
 
 EW = FileManager.load_connected_components("prova.txt")
@@ -113,14 +77,14 @@ EW = FileManager.load_connected_components("prova.txt")
 
 GL.VIEW([
 	#Visualization.points_color_from_rgb(Common.apply_matrix(Lar.t(-centroid...),INPUT_PC.coordinates),INPUT_PC.rgbs),
-	GL.GLGrid(V,EV,GL.COLORS[2],0.8),
+	#GL.GLGrid(V,EV,GL.COLORS[2],0.8),
 	GL.GLGrid(V,EW,GL.COLORS[1],0.8),
 	#GL.GLPoints(convert(Lar.Points,Common.apply_matrix(Lar.t(-centroid...),points)'))
 ])
 
 
-## Esempio di test grafo con loop
-
-V = [8. 2 5 14 12 10 7 12; 2 5 10 9 2 4 6 8]
-EV = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,6],[1,6]]
-# EV = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,1]]
+# ## Esempio di test grafo con loop
+#
+# V = [8. 2 5 14 12 10 7 12; 2 5 10 9 2 4 6 8]
+# EV = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,6],[1,6]]
+# # EV = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,1]]

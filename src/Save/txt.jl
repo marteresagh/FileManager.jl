@@ -221,13 +221,13 @@ end
 """
 function save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cells)
 	io = open(filename,"w")
-
-	g = Common.makes_direct(V,EV,1)
+	g = Common.model2graph(V,EV)
 
 	conn_comps = Common.LightGraphs.connected_components(g)
 	for comp in conn_comps
 		subgraph,vmap = LightGraphs.induced_subgraph(g, comp)
-		cycles = LightGraphs.simplecycles(subgraph)
+		dg = Common.makes_direct(subgraph,1)
+		cycles = LightGraphs.simplecycles(dg)
 		for cycle in cycles
 			inds = vmap[cycle]
 			for ind in inds[1:end-1]
