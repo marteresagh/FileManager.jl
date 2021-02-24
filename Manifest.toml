@@ -64,8 +64,8 @@ uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
 version = "0.9.1"
 
 [[Common]]
-deps = ["Delaunay", "LightGraphs", "LinearAlgebraicRepresentation", "NearestNeighbors", "QHull", "SparseArrays", "Statistics"]
-git-tree-sha1 = "a8862cae825ecc78eba7531be9f7297aa0ddf0c2"
+deps = ["Delaunay", "LightGraphs", "LinearAlgebraicRepresentation", "NearestNeighbors", "QHull", "SparseArrays", "Statistics", "Triangulate"]
+git-tree-sha1 = "efd8f24f5dff14d90d97b2f7be387eff82fa507d"
 repo-rev = "master"
 repo-url = "https://github.com/marteresagh/Common.jl"
 uuid = "1e120bc2-2bd2-483a-9663-793997b3971f"
@@ -146,6 +146,12 @@ version = "0.10.1"
 [[Distributed]]
 deps = ["Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+
+[[DocStringExtensions]]
+deps = ["LibGit2", "Markdown", "Pkg", "Test"]
+git-tree-sha1 = "50ddf44c53698f5e784bbebb3f4b21c5807401b1"
+uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
+version = "0.8.3"
 
 [[FileIO]]
 deps = ["Pkg"]
@@ -460,6 +466,18 @@ deps = ["BinDeps", "Libdl"]
 git-tree-sha1 = "ddfa28d6c66ee8e195680a8c419f3cf230b7c91e"
 uuid = "56f361f5-126b-55db-87fb-1c71988fcde4"
 version = "0.3.1"
+
+[[Triangle_jll]]
+deps = ["Libdl", "Pkg"]
+git-tree-sha1 = "342e1001500859edd74e95a4971d178b2565b42b"
+uuid = "5639c1d2-226c-5e70-8d55-b3095415a16a"
+version = "1.6.0+0"
+
+[[Triangulate]]
+deps = ["DocStringExtensions", "Libdl", "Printf", "Test", "Triangle_jll"]
+git-tree-sha1 = "98610e899989a214d7c68d845e36d40d61fa7bc5"
+uuid = "f7e6ffb2-c36d-4f8f-a77e-16e897189344"
+version = "1.0.1"
 
 [[URIParser]]
 deps = ["Unicode"]
