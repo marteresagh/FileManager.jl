@@ -195,14 +195,14 @@ function save_finite_plane(folder::String, hyperplane::Hyperplane)
 	plane = Plane(dir,cen)
 
 
-	points2D = Detection.Common.apply_matrix(plane.matrix,inliers)[1:2,:]
-	R = Detection.Common.basis_minimum_OBB_2D(points2D)
-	affine_matrix = Detection.Lar.approxVal(16).(Detection.Common.matrix4(Detection.Lar.inv(R))*plane.matrix) # rotation matrix
+	points2D = Common.apply_matrix(plane.matrix,inliers)[1:2,:]
+	R = Common.basis_minimum_OBB_2D(points2D)
+	affine_matrix = Lar.approxVal(16).(Common.matrix4(Detection.Lar.inv(R))*plane.matrix) # rotation matrix
 
 	center_, R = affine_matrix[1:3,4], affine_matrix[1:3,1:3]
 
-	V = Common.apply_matrix(Common.matrix4(Lar.inv(R)),Common.apply_matrix(Lar.t(-center_...),points))
-	aabb = Common.boundingbox(V)
+	V = Common.apply_matrix(Common.matrix4(Lar.inv(R)),Common.apply_matrix(Lar.t(-center_...),inliers))
+	aabb = Common.boundingbox(inliers)
 
 	center_aabb = [(aabb.x_max+aabb.x_min)/2,(aabb.y_max+aabb.y_min)/2,(aabb.z_max+aabb.z_min)/2]
 	center = Common.apply_matrix(Common.matrix4(R),center_aabb) + center_
