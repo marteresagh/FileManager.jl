@@ -194,7 +194,7 @@ function save_finite_plane(folder::String, hyperplane::Hyperplane)
 	cen = hyperplane.centroid
 	plane = Plane(dir,cen)
 
-	obb = Common.oriented_boundingbox(inliers)
+	obb = Common.ch_oriented_boundingbox(inliers)
 	extent = obb.scale
 	center = obb.position
 	euler = obb.rotation
