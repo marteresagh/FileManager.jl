@@ -149,7 +149,7 @@ function read_data_vect2D(folder::String,NAME_PROJ::String)
 
 	full_inliers_folder = joinpath(joinpath(folder,NAME_PROJ),"PLANES")
 	if isdir(full_inliers_folder)
-		las_full_inliers = FileManager.searchfile(,".las")
+		las_full_inliers = FileManager.searchfile(full_inliers_folder,".las")
 	end
 
 	###############################################################
