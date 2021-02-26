@@ -190,9 +190,10 @@ end
 """
 function save_finite_plane(folder::String, hyperplane::Hyperplane)
 	inliers = hyperplane.inliers.coordinates
+	plane = Plane(hyperplane.direction, hyperplane.centroid)
+
 	# centroid = Common.centroid(inliers)
 	#
-	# plane = Plane(hyperplane.direction, centroid)
 	# points2D = Common.apply_matrix(plane.matrix,inliers)[1:2,:]
 	# R = Common.basis_minimum_OBB_2D(points2D)
 	# affine_matrix = Lar.approxVal(16).(Common.matrix4(Lar.inv(R))*plane.matrix) # rotation matrix
