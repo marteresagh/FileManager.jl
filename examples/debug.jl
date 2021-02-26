@@ -43,10 +43,29 @@ function read_data_vect2D(folder::String,NAME_PROJ::String)
 			end
 		end
 	end
-	return hyperplanes, OBBs, alpha_shapes
+
+	las_full_inliers = FileManager.searchfile(joinpath(joinpath(folder,NAME_PROJ),"PLANES"),".las")
+
+	###############################################################
+	# for file in las_full_inliers
+	# 	h,_ = LasIO.FileIO.load(file)
+	# 	if h.records_count > 1000
+	# 		PC = FileManager.las2pointcloud(file)
+	# 		points = PC.coordinates
+	# 		aabb = Common.boundingbox(points)
+	# 		obb = Common.ch_oriented_boundingbox(points)
+	# 		plane = Plane(points)
+	# 		push!(planes,plane)
+	# 		push!(AABBs,aabb)
+	# 		push!(OBBs,obb)
+	# 	end
+	# end
+	###############################################################
+
+	return hyperplanes, OBBs, alpha_shapes, las_full_inliers
 end
 
-hyperplanes, OBBs, alpha_shapes = read_data_vect2D(folder::String,NAME_PROJ::String)
+hyperplanes, OBBs, alpha_shapes = FileManager.read_data_vect2D(folder::String,NAME_PROJ::String)
 
 V,FV = Common.DrawPlanes(hyperplanes; box_oriented = false)
 centroid = Common.centroid(V)
