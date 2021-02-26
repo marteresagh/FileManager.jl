@@ -194,7 +194,22 @@ function save_finite_plane(folder::String, hyperplane::Hyperplane)
 	cen = hyperplane.centroid
 	plane = Plane(dir,cen)
 
-	obb = Common.ch_oriented_boundingbox(inliers)
+
+	points2D = Detection.Common.apply_matrix(plane.matrix,inliers)[1:2,:]
+	R = Detection.Common.basis_minimum_OBB_2D(points2D)
+	affine_matrix = Detection.Lar.approxVal(16).(Detection.Common.matrix4(Detection.Lar.inv(R))*plane.matrix) # rotation matrix
+
+	center_, R = affine_matrix[1:3,4], affine_matrix[1:3,1:3]
+
+	V = Common.apply_matrix(Common.matrix4(Lar.inv(R)),Common.apply_matrix(Lar.t(-center_...),points))
+	aabb = Common.boundingbox(V)
+
+	center_aabb = [(aabb.x_max+aabb.x_min)/2,(aabb.y_max+aabb.y_min)/2,(aabb.z_max+aabb.z_min)/2]
+	center = Common.apply_matrix(Common.matrix4(R),center_aabb) + center_
+	extent = [aabb.x_max - aabb.x_min,aabb.y_max - aabb.y_min, aabb.z_max - aabb.z_min]
+
+	obb = Volume(extent,vcat(center...),Common.matrix2euler(R))
+
 	extent = obb.scale
 	center = obb.position
 	euler = obb.rotation
