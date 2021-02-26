@@ -119,6 +119,7 @@ function read_data_vect2D(folder::String,NAME_PROJ::String)
 	OBBs = Volume[]
 	hyperplanes = Hyperplane[]
 	alpha_shapes = Lar.LAR[]
+	las_full_inliers = nothing
 	for (root, dirs, files) in walkdir(joinpath(folder,NAME_PROJ))
 		for dir in dirs
 			if dir!="PLANES"
@@ -146,7 +147,10 @@ function read_data_vect2D(folder::String,NAME_PROJ::String)
 		end
 	end
 
-	las_full_inliers = FileManager.searchfile(joinpath(joinpath(folder,NAME_PROJ),"PLANES"),".las")
+	full_inliers_folder = joinpath(joinpath(folder,NAME_PROJ),"PLANES")
+	if isdir(full_inliers_folder)
+		las_full_inliers = FileManager.searchfile(,".las")
+	end
 
 	###############################################################
 	# for file in las_full_inliers
