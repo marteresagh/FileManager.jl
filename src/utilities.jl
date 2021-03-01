@@ -118,6 +118,7 @@ function read_data_vect2D(folder::String,NAME_PROJ::String)
 	OBBs = Volume[]
 	hyperplanes = Hyperplane[]
 	alpha_shapes = Lar.LAR[]
+	full_alpha_shapes = Lar.LAR[]
  	folders = String[]
 	las_full_inliers = String[]
 
@@ -130,7 +131,7 @@ function read_data_vect2D(folder::String,NAME_PROJ::String)
 
 	n_planes = length(folders)
 	for i in 1:n_planes
-		println("$i folder processed of $n_planes" )
+		print("$i of $n_planes" )
 		io = open(joinpath(folders[i],"finite_plane.txt"), "r")
 		lines = readlines(io)
 		close(io)
@@ -155,10 +156,14 @@ function read_data_vect2D(folder::String,NAME_PROJ::String)
 			push!(las_full_inliers,full_inliers)
 		end
 
-		# if full alpha shapes
-		# get model
+		full_shapes = 	joinpath(folders[i],"full_boundary_points.txt")
+		if isfile(full_shapes)
+			V = FileManager.load_points(joinpath(folders[i],"full_boundary_points.txt"))
+			EV = FileManager.load_connected_components(joinpath(folders[i],"full_boundary_edges.txt")) #FileManager.load_cells(joinpath(folder_plane,"boundary_edges.txt"))
+			model = (V,EV)
+			push!(full_alpha_shapes,model)
+		end
 	end
 
-
-	return folders, hyperplanes, OBBs, alpha_shapes, las_full_inliers
+	return folders, hyperplanes, OBBs, alpha_shapes, las_full_inliers, full_alpha_shapes
 end
