@@ -156,7 +156,7 @@ function read_data_vect2D(folder::String,NAME_PROJ::String)
 		end
 
 		# if full alpha shapes
-		# get model 
+		# get model
 	end
 
 
