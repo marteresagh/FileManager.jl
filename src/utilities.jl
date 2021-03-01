@@ -119,7 +119,7 @@ function read_data_vect2D(folder::String,NAME_PROJ::String)
 	hyperplanes = Hyperplane[]
 	alpha_shapes = Lar.LAR[]
  	folders = String[]
-	las_full_inliers = nothing
+	las_full_inliers = String[]
 
 	for (root, dirs, files) in walkdir(joinpath(folder,NAME_PROJ))
 		for dir in dirs
