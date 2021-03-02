@@ -110,24 +110,93 @@ function source2pc(source::String, lod::Union{Nothing,Int64})
 
 end
 
-
-"""
-	Read data in vectorized_2D folder results.
-"""
-function read_data_vect2D(folder::String,NAME_PROJ::String)
-	OBBs = Volume[]
-	hyperplanes = Hyperplane[]
-	alpha_shapes = Lar.LAR[]
-	full_alpha_shapes = Lar.LAR[]
- 	folders = String[]
-	las_full_inliers = String[]
-
+############################################# LOAD VECT 2D ################################
+function get_plane_folders(folder::String,NAME_PROJ::String)
+	folders = String[]
 	for (root, dirs, files) in walkdir(joinpath(folder,NAME_PROJ))
 		for dir in dirs
 			folder_plane = joinpath(root,dir)
 			push!(folders, folder_plane)
 		end
 	end
+	return folders
+end
+
+function get_hyperplanes(folders::Array{String,1})
+	hyperplanes = Hyperplane[]
+	n_planes = length(folders)
+	OBBs = Volume[]
+	for i in 1:n_planes
+		println("$i of $n_planes" )
+		io = open(joinpath(folders[i],"finite_plane.txt"), "r")
+		lines = readlines(io)
+		close(io)
+
+		b = [tryparse.(Float64,split(lines[i], " ")) for i in 1:length(lines)]
+		normal = [b[1][1],b[1][2],b[1][3]]
+		centroid = normal*b[1][4]
+		inliers = FileManager.load_points(joinpath(folders[i],"inliers.txt"))
+
+		hyperplane = Hyperplane(PointCloud(inliers[1:3,:],inliers[4:6,:]), normal, centroid)
+		OBB = Volume([b[2][1],b[2][2],b[2][3]],[b[3][1],b[3][2],b[3][3]],[b[4][1],b[4][2],b[4][3]])
+		push!(hyperplanes,hyperplane)
+		push!(OBBs,OBB)
+	end
+	return hyperplanes, OBBs
+end
+
+function get_boundary(folders::Array{String,1})
+	boundary = Lar.LAR[]
+	full_boundary = Lar.LAR[]
+	n_planes = length(folders)
+	for i in 1:n_planes
+		println("$i of $n_planes" )
+
+		V = FileManager.load_points(joinpath(folders[i],"boundary_points.txt"))
+		EV = FileManager.load_connected_components(joinpath(folders[i],"boundary_edges.txt"))
+		model = (V,EV)
+		push!(boundary,model)
+
+		point_file = joinpath(folders[i],"full_boundary_points.txt")
+		if isfile(point_file)
+			V = FileManager.load_points(joinpath(folders[i],"full_boundary_points.txt"))
+			EV = FileManager.load_connected_components(joinpath(folders[i],"full_boundary_edges.txt"))
+			model = (V,EV)
+			push!(full_boundary,model)
+		end
+	end
+
+	return boundary, full_boundary
+end
+
+function get_all_inliers(folders::Array{String,1})
+	las_full_inliers = String[]
+
+	n_planes = length(folders)
+	for i in 1:n_planes
+		println("$i of $n_planes" )
+
+		full_inliers = 	joinpath(folders[i],"full_inliers.las")
+		if isfile(full_inliers)
+			push!(las_full_inliers,full_inliers)
+		end
+	end
+
+	return las_full_inliers
+end
+
+"""
+	Read all data in vectorized_2D folder results.
+"""
+function read_all_data(folder::String,NAME_PROJ::String)
+	OBBs = Volume[]
+	hyperplanes = Hyperplane[]
+	alpha_shapes = Lar.LAR[]
+	full_alpha_shapes = Lar.LAR[]
+
+	las_full_inliers = String[]
+
+	folders = get_plane_folders(folder,NAME_PROJ)
 
 	n_planes = length(folders)
 	for i in 1:n_planes
@@ -167,3 +236,5 @@ function read_data_vect2D(folder::String,NAME_PROJ::String)
 
 	return folders, hyperplanes, OBBs, alpha_shapes, las_full_inliers, full_alpha_shapes
 end
+
+############################################# END LOAD VECT 2D ################################
