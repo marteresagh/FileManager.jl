@@ -131,7 +131,7 @@ function read_data_vect2D(folder::String,NAME_PROJ::String)
 
 	n_planes = length(folders)
 	for i in 1:n_planes
-		print("$i of $n_planes" )
+		println("$i of $n_planes" )
 		io = open(joinpath(folders[i],"finite_plane.txt"), "r")
 		lines = readlines(io)
 		close(io)
