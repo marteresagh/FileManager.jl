@@ -127,7 +127,6 @@ function get_hyperplanes(folders::Array{String,1})
 	n_planes = length(folders)
 	OBBs = Volume[]
 	for i in 1:n_planes
-		println("$i of $n_planes" )
 		io = open(joinpath(folders[i],"finite_plane.txt"), "r")
 		lines = readlines(io)
 		close(io)
@@ -150,8 +149,6 @@ function get_boundary(folders::Array{String,1})
 	full_boundary = Lar.LAR[]
 	n_planes = length(folders)
 	for i in 1:n_planes
-		println("$i of $n_planes" )
-
 		V = FileManager.load_points(joinpath(folders[i],"boundary_points.txt"))
 		EV = FileManager.load_connected_components(joinpath(folders[i],"boundary_edges.txt"))
 		model = (V,EV)
@@ -174,8 +171,6 @@ function get_all_inliers(folders::Array{String,1})
 
 	n_planes = length(folders)
 	for i in 1:n_planes
-		println("$i of $n_planes" )
-
 		full_inliers = 	joinpath(folders[i],"full_inliers.las")
 		if isfile(full_inliers)
 			push!(las_full_inliers,full_inliers)
@@ -200,7 +195,6 @@ function read_all_data(folder::String,NAME_PROJ::String)
 
 	n_planes = length(folders)
 	for i in 1:n_planes
-		println("$i of $n_planes" )
 		io = open(joinpath(folders[i],"finite_plane.txt"), "r")
 		lines = readlines(io)
 		close(io)
