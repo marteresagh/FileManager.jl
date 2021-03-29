@@ -259,21 +259,12 @@ end
 
 function save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cells)
 
-	function get_boundary_points(V::Lar.Points,EV::Lar.Cells)
-		M_2 = Common.K(EV)
-
-		S1 = sum(M_2',dims=2)
-
-		outer = [k for k=1:length(S1) if S1[k]==1]
-		return outer
-	end
-
 	io = open(filename,"w")
 
 	graph = Common.model2graph_edge2edge(V,EV)
 	comps = LightGraphs.connected_components(graph)
 
-
+	points = Int64[]
 	for comp in comps
 		ext = Common.get_boundary_points(V,EV[comp])
 		if length(ext) == 2
