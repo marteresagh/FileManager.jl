@@ -234,8 +234,63 @@ end
 """
 
 """
+# function save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cells)
+# 	io = open(filename,"w")
+# 	g = Common.model2graph(V,EV)
+#
+# 	conn_comps = Common.LightGraphs.connected_components(g)
+# 	for comp in conn_comps
+# 		subgraph,vmap = LightGraphs.induced_subgraph(g, comp)
+# 		dg = Common.makes_direct(subgraph,1)
+# 		cycles = LightGraphs.simplecycles(dg)
+# 		for cycle in cycles
+# 			inds = vmap[cycle]
+# 			for ind in inds[1:end-1]
+# 				write(io,"$ind ")
+# 			end
+# 			write(io,"$(inds[end])\n")
+# 		end
+# 	end
+#
+# 	close(io)
+# end
+
+
+
 function save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cells)
+
+	function get_boundary_points(V::Lar.Points,EV::Lar.Cells)
+		M_2 = Common.K(EV)
+
+		S1 = sum(M_2',dims=2)
+
+		outer = [k for k=1:length(S1) if S1[k]==1]
+		return outer
+	end
+
 	io = open(filename,"w")
+
+	raph = Common.model2graph_edge2edge(V,EV)
+	comps = LightGraphs.connected_components(graph)
+
+
+	for comp in comps
+		ext = Common.get_boundary_points(V,EV[comp])
+		if length(ext) == 2
+			push!(points,ext...)
+			# push!(EV,ext)
+		end
+	end
+
+
+	T = V[:,points]
+	kdtree = Common.KDTree(T)
+	for p in 1:length(points)
+		idxs,dists = Common.knn(kdtree, T[:,p], 1, true, i -> i == p)
+		push!(EV,[points[p],points[idxs[1]]])
+	end
+
+
 	g = Common.model2graph(V,EV)
 
 	conn_comps = Common.LightGraphs.connected_components(g)
