@@ -270,7 +270,7 @@ function save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cell
 
 	io = open(filename,"w")
 
-	raph = Common.model2graph_edge2edge(V,EV)
+	graph = Common.model2graph_edge2edge(V,EV)
 	comps = LightGraphs.connected_components(graph)
 
 
