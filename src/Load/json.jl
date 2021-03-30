@@ -119,27 +119,15 @@ function ucs2matrix(file::String)
 	xAxis = dict["data"]["xAxis"]
 	yAxis = dict["data"]["yAxis"]
 	zAxis = dict["data"]["zAxis"]
-	M =  zeros(4,4)
 
-	M[1,1] = xAxis["x"]
-	M[1,2] = xAxis["y"]
-	M[1,3] = xAxis["z"]
-
-	M[2,1] = yAxis["x"]
-	M[2,2] = yAxis["y"]
-	M[2,3] = yAxis["z"]
-
-	M[3,1] = zAxis["x"]
-	M[3,2] = zAxis["y"]
-	M[3,3] = zAxis["z"]
-
-	O = M[1:3, 1:3] * -[origin["x"], origin["y"], origin["z"]]
-	M[1,4] = O[1]
-	M[2,4] = O[2]
-	M[3,4] = O[3]
-
-	M[4,4] = 1.0
-	return M
+	O = [origin["x"],origin["y"],origin["z"]]
+	axis_x = [xAxis["x"],xAxis["y"],xAxis["z"]]
+	axis_y = [yAxis["x"],yAxis["y"],yAxis["z"]]
+	axis_z = [zAxis["x"],zAxis["y"],zAxis["z"]]
+	rot = hcat(axis_x, axis_y, axis_z)
+	M = Common.matrix4(rot)
+	M[1:3,4] = O
+	return Common.Lar.inv(M)
 end
 
 
