@@ -162,90 +162,12 @@ end
 # end
 #
 
-"""
-	 write_line(s_2d::IOStream, s_3d::IOStream, line::Hyperplane, affine_matrix::Matrix)
-"""
-function write_line(s_2d::IOStream, s_3d::IOStream, line::Hyperplane, affine_matrix::Matrix)
-	V,_ = Common.DrawLines(line)
-	write(s_2d, "$(V[1,1]) $(V[2,1]) $(V[1,2]) $(V[2,2])\n")
-	V1 = vcat(V,(zeros(size(V,2)))')
-	V3D = Common.apply_matrix(affine_matrix,V1)
-	write(s_3d, "$(V3D[1,1]) $(V3D[2,1]) $(V3D[3,1]) $(V3D[1,2]) $(V3D[2,2]) $(V3D[3,2])\n")
-end
-
 
 """
-	save_finite_plane(folder::String, hyperplane::Hyperplane)
+	 save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cells)
+
+Saves connected components of model by row.
 """
-function save_finite_plane(folder::String, hyperplane::Hyperplane)
-	inliers = hyperplane.inliers.coordinates
-	plane = Plane(hyperplane.direction, hyperplane.centroid)
-
-	# centroid = Common.centroid(inliers)
-	#
-	# points2D = Common.apply_matrix(plane.matrix,inliers)[1:2,:]
-	# R = Common.basis_minimum_OBB_2D(points2D)
-	# affine_matrix = Lar.approxVal(16).(Common.matrix4(Lar.inv(R))*plane.matrix) # rotation matrix
-	# center_, R = affine_matrix[1:3,4], affine_matrix[1:3,1:3]
-	#
-	# V = Common.apply_matrix(affine_matrix,inliers)
-	# aabb = Common.boundingbox(V)
-	#
-	# center_aabb = [(aabb.x_max+aabb.x_min)/2,(aabb.y_max+aabb.y_min)/2,(aabb.z_max+aabb.z_min)/2]
-	# center = Common.apply_matrix(Lar.inv(affine_matrix),center_aabb)
-	# extent = [aabb.x_max - aabb.x_min,aabb.y_max - aabb.y_min, aabb.z_max - aabb.z_min]
-	# obb = Volume(extent,vcat(center...),Common.matrix2euler(Lar.inv(R)))
-
-
-	obb = Common.ch_oriented_boundingbox(inliers)
-
-	extent = obb.scale
-	center = obb.position
-	euler = obb.rotation
-
-	io = open(joinpath(folder,"finite_plane.txt"),"w")
-
-	# plane
-	write(io, "$(plane.a) $(plane.b) $(plane.c) $(plane.d)\n")
-	# extent
-	write(io, "$(extent[1]) $(extent[2]) $(extent[3])\n")
-	# position
-	write(io, "$(center[1]) $(center[2]) $(center[3])\n")
-	# euler angles
-	write(io, "$(euler[1]) $(euler[2]) $(euler[3])\n")
-
-	close(io)
-
-	save_points_rgbs_txt(joinpath(folder,"inliers.txt"), hyperplane.inliers)
-
-end
-
-"""
-
-"""
-# function save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cells)
-# 	io = open(filename,"w")
-# 	g = Common.model2graph(V,EV)
-#
-# 	conn_comps = Common.LightGraphs.connected_components(g)
-# 	for comp in conn_comps
-# 		subgraph,vmap = LightGraphs.induced_subgraph(g, comp)
-# 		dg = Common.makes_direct(subgraph,1)
-# 		cycles = LightGraphs.simplecycles(dg)
-# 		for cycle in cycles
-# 			inds = vmap[cycle]
-# 			for ind in inds[1:end-1]
-# 				write(io,"$ind ")
-# 			end
-# 			write(io,"$(inds[end])\n")
-# 		end
-# 	end
-#
-# 	close(io)
-# end
-
-
-
 function save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cells)
 
 	io = open(filename,"w")
