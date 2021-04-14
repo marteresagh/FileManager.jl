@@ -137,22 +137,22 @@ end
 # """
 # Read file .hrc of potree hierarchy.
 # """
-function readhrc(potree::String)
-
-	cloudmetadata = CloudMetadata(potree)
-	tree = joinpath(potree,cloudmetadata.octreeDir,"r") # path to directory "r"
-	hrcs = searchfile(tree,".hrc")
-
-	for hrc in hrcs
-		raw = read(hrc)
-		treehrc = reshape(raw, (5, div(length(raw), 5)))
-
-		for i in 1:size(treehrc,2)
-			children = bitstring(UInt8(treehrc[1,i]))
-			npoints = parse(Int, bitstring(UInt8(treehrc[5,i]))*bitstring(UInt8(treehrc[4,i]))*bitstring(UInt8(treehrc[3,i]))*bitstring(UInt8(treehrc[2,i])); base=2)
-			#struct da finire
-			@show children, npoints
-		end
-	end
-
-end
+# function readhrc(potree::String)
+#
+# 	cloudmetadata = CloudMetadata(potree)
+# 	tree = joinpath(potree,cloudmetadata.octreeDir,"r") # path to directory "r"
+# 	hrcs = searchfile(tree,".hrc")
+#
+# 	for hrc in hrcs
+# 		raw = read(hrc)
+# 		treehrc = reshape(raw, (5, div(length(raw), 5)))
+#
+# 		for i in 1:size(treehrc,2)
+# 			children = bitstring(UInt8(treehrc[1,i]))
+# 			npoints = parse(Int, bitstring(UInt8(treehrc[5,i]))*bitstring(UInt8(treehrc[4,i]))*bitstring(UInt8(treehrc[3,i]))*bitstring(UInt8(treehrc[2,i])); base=2)
+# 			#struct da finire
+# 			@show children, npoints
+# 		end
+# 	end
+#
+# end

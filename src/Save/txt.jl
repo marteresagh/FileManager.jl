@@ -114,53 +114,53 @@ function save_tfw(output::String, GSD::Float64, lx::Float64, uy::Float64)
 	write(io, "$U\n")
 	close(io)
 end
-
-"""
-"""
-function save_hyperplane(filename::String, hyperplane::Hyperplane)
-	V = hyperplane.inliers.coordinates
-	dir = hyperplane.direction
-	cen = hyperplane.centroid
-	dim = length(dir)
-
-	io = open(filename,"w")
-
-	for j in 1:dim
-		if j == dim
-			write(io, "$(dir[j])")
-		else
-			write(io, "$(dir[j]) ")
-		end
-	end
-
-	write(io, "\n")
-
-	for j in 1:dim
-		if j == dim
-			write(io, "$(cen[j])")
-		else
-			write(io, "$(cen[j]) ")
-		end
-	end
-
-	write(io, "\n")
-
-	for i in 1:size(V,2)
-		for j in 1:size(V,1)
-
-			if j == size(V,1)
-				write(io, "$(V[j,i])")
-			else
-				write(io, "$(V[j,i]) ")
-			end
-
-		end
-		write(io, "\n")
-	end
-
-	close(io)
-end
-
+#
+# """
+# """
+# function save_hyperplane(filename::String, hyperplane::Hyperplane)
+# 	V = hyperplane.inliers.coordinates
+# 	dir = hyperplane.direction
+# 	cen = hyperplane.centroid
+# 	dim = length(dir)
+#
+# 	io = open(filename,"w")
+#
+# 	for j in 1:dim
+# 		if j == dim
+# 			write(io, "$(dir[j])")
+# 		else
+# 			write(io, "$(dir[j]) ")
+# 		end
+# 	end
+#
+# 	write(io, "\n")
+#
+# 	for j in 1:dim
+# 		if j == dim
+# 			write(io, "$(cen[j])")
+# 		else
+# 			write(io, "$(cen[j]) ")
+# 		end
+# 	end
+#
+# 	write(io, "\n")
+#
+# 	for i in 1:size(V,2)
+# 		for j in 1:size(V,1)
+#
+# 			if j == size(V,1)
+# 				write(io, "$(V[j,i])")
+# 			else
+# 				write(io, "$(V[j,i]) ")
+# 			end
+#
+# 		end
+# 		write(io, "\n")
+# 	end
+#
+# 	close(io)
+# end
+#
 
 """
 	 write_line(s_2d::IOStream, s_3d::IOStream, line::Hyperplane, affine_matrix::Matrix)
@@ -173,17 +173,6 @@ function write_line(s_2d::IOStream, s_3d::IOStream, line::Hyperplane, affine_mat
 	write(s_3d, "$(V3D[1,1]) $(V3D[2,1]) $(V3D[3,1]) $(V3D[1,2]) $(V3D[2,2]) $(V3D[3,2])\n")
 end
 
-
-"""
-	successful(test::Bool,folder::String; message=""::String)
-"""
-function successful(test::Bool,folder::String; message=""::String)
-	if test
-		io = open(joinpath(folder,"execution.probe"),"w")
-		write(io, message)
-		close(io)
-	end
-end
 
 """
 	save_finite_plane(folder::String, hyperplane::Hyperplane)
