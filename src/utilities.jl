@@ -1,27 +1,9 @@
-# """
-# Read file line by line.
-# """
-# function get_directories(filepath::String)
-# 	return readlines(filepath)
-# end
-
-# """
-# 	boxmodelfromjson(volume::String)
-#
-# Read volume model from a file JSON.
-# """
-# function boxmodel_from_json(volume::String)
-# 	V,EV,FV = json2LARvolume(volume)
-# 	return V,EV,FV
-# end
-
 """
-	Common.getmodel("C:\pathto\volume.json")
-	Common.getmodel([x_min y_min z_min x_max y_max z_max ])
+	getmodel(bbin::String)
+	getmodel(bbin::Array{Float64,1})
 
 Return LAR model (V,EV,FV) of a box, aligned or not to axes.
 """
-# overload method of Common
 function Common.getmodel(bbin::String)
 	# path of voume json
 	return json2LARvolume(bbin)
@@ -131,3 +113,21 @@ function successful(test::Bool,folder::String; message=""::String)
 		close(io)
 	end
 end
+
+
+# """
+# Read file line by line.
+# """
+# function get_directories(filepath::String)
+# 	return readlines(filepath)
+# end
+
+# """
+# 	boxmodelfromjson(volume::String)
+#
+# Read volume model from a file JSON.
+# """
+# function boxmodel_from_json(volume::String)
+# 	V,EV,FV = json2LARvolume(volume)
+# 	return V,EV,FV
+# end
