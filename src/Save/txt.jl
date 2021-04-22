@@ -1,4 +1,3 @@
-
 """
 Save points by row in file .txt.
 """
@@ -161,53 +160,3 @@ end
 # 	close(io)
 # end
 #
-
-
-"""
-	 save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cells)
-
-Saves connected components of model by row.
-"""
-function save_connected_components(filename::String, V::Lar.Points, EV::Lar.Cells)
-
-	io = open(filename,"w")
-
-	graph = Common.model2graph_edge2edge(V,EV)
-	comps = LightGraphs.connected_components(graph)
-
-	points = Int64[]
-	for comp in comps
-		ext = Common.get_boundary_points(V,EV[comp])
-		if length(ext) == 2
-			push!(points,ext...)
-			# push!(EV,ext)
-		end
-	end
-
-
-	T = V[:,points]
-	kdtree = Common.KDTree(T)
-	for p in 1:length(points)
-		idxs,dists = Common.knn(kdtree, T[:,p], 1, true, i -> i == p)
-		push!(EV,[points[p],points[idxs[1]]])
-	end
-
-
-	g = Common.model2graph(V,EV)
-
-	conn_comps = Common.LightGraphs.connected_components(g)
-	for comp in conn_comps
-		subgraph,vmap = LightGraphs.induced_subgraph(g, comp)
-		dg = Common.makes_direct(subgraph,1)
-		cycles = LightGraphs.simplecycles(dg)
-		for cycle in cycles
-			inds = vmap[cycle]
-			for ind in inds[1:end-1]
-				write(io,"$ind ")
-			end
-			write(io,"$(inds[end])\n")
-		end
-	end
-
-	close(io)
-end

@@ -41,9 +41,9 @@ version = "0.5.1"
 
 [[ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
-git-tree-sha1 = "44e9f638aa9ed1ad58885defc568c133010140aa"
+git-tree-sha1 = "42e3c181483fbd2c416087a0a93838803e358358"
 uuid = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
-version = "0.9.37"
+version = "0.9.38"
 
 [[CodecBzip2]]
 deps = ["Bzip2_jll", "Libdl", "TranscodingStreams"]
@@ -65,7 +65,7 @@ version = "0.9.1"
 
 [[Common]]
 deps = ["Delaunay", "LightGraphs", "LinearAlgebraicRepresentation", "NearestNeighbors", "QHull", "SparseArrays", "Statistics", "Triangulate"]
-git-tree-sha1 = "f2c387c895fc6af631b28852e23a92a406e313d2"
+git-tree-sha1 = "e8554e1f7c5febb71dc61c3ecf46322f4216cf12"
 repo-rev = "master"
 repo-url = "https://github.com/marteresagh/Common.jl"
 uuid = "1e120bc2-2bd2-483a-9663-793997b3971f"
@@ -247,10 +247,10 @@ uuid = "570499db-eae3-5eb6-bdd5-a5326f375e68"
 version = "0.3.6"
 
 [[LazIO]]
-deps = ["FileIO", "FixedPointNumbers", "LASzip_jll", "LasIO", "Libdl", "Parameters", "Tables", "Test"]
-git-tree-sha1 = "3fce9d954fc2ecfde27e88cef20712c8c8e5e748"
+deps = ["Dates", "FileIO", "FixedPointNumbers", "LASzip_jll", "LasIO", "Libdl", "Parameters", "Tables", "Test"]
+git-tree-sha1 = "5e5b218a093a613452c8b0252fd4e2d683a573b3"
 uuid = "c3605908-9f0f-11e8-0a72-0d361c15a277"
-version = "0.2.1"
+version = "0.3.3"
 
 [[LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
