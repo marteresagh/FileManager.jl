@@ -127,7 +127,7 @@ function ucs2matrix(file::String)
 	rot = hcat(axis_x, axis_y, axis_z)
 	M = Common.matrix4(rot)
 	M[1:3,4] = O
-	return Common.Lar.inv(M)
+	return Common.inv(M)
 end
 
 #

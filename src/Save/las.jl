@@ -203,12 +203,12 @@ function save_pointcloud(filename::String, pc::PointCloud,  software::String)
 		points = vcat(pc.coordinates,zeros(pc.n_points)')
 	else
 		points = pc.coordinates
-	end	
+	end
 
 	rgbs = pc.rgbs
 	npoints = pc.n_points
 
-	aabb = Common.boundingbox(points)
+	aabb = AABB(points)
 	header = newHeader(aabb,software,SIZE_DATARECORD,npoints)
 
 	pvec = Array{LasPoint,1}(undef,npoints)

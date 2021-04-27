@@ -44,8 +44,8 @@ version           :: String
 octreeDir         :: String
 projection        :: String
 points            :: Int64
-boundingBox       :: Common.AABB
-tightBoundingBox  :: Common.AABB
+boundingBox       :: AABB
+tightBoundingBox  :: AABB
 pointAttributes   :: String
 spacing           :: Float64
 scale             :: Float64

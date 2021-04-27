@@ -16,11 +16,11 @@ function las2pointcloud(fnames::String...)::PointCloud
 end
 
 """
-	las2larpoints(file::String) -> Lar.Points
+	las2larpoints(file::String) -> Points
 
 Return coordinates of points in LAS file.
 """
-function las2larpoints(file::String)::Lar.Points
+function las2larpoints(file::String)::Points
 	header, laspoints = read_LAS_LAZ(file)
 	npoints = length(laspoints)
 	x = [LasIO.xcoord(laspoints[k], header) for k in 1:npoints]
@@ -48,11 +48,11 @@ end
 
 
 """
-	las2color(file::String)::Lar.Points
+	las2color(file::String)::Points
 
 Return color, rgb, associated to each point in LAS file.
 """
-function las2color(file::String)::Lar.Points
+function las2color(file::String)::Points
 	header, laspoints =  read_LAS_LAZ(file)
 	npoints = length(laspoints)
 	type = LasIO.pointformat(header)
