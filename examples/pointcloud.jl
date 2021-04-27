@@ -8,8 +8,8 @@ max_level = FileManager.max_depth(trie)
 files = FileManager.get_files_in_potree_folder(potree,2, true)
 PC = FileManager.las2pointcloud(files...)
 
-GL.VIEW(
+Visualization.VIEW(
     [
-    Visualization.points_color_from_rgb(PC.coordinates, PC.rgbs)
+    Visualization.points(PC.coordinates, PC.rgbs)
     ]
 )

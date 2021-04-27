@@ -11,9 +11,9 @@ all_files = FileManager.get_all_values(trie)
 PC = FileManager.las2pointcloud(all_files...)
 
 # point cloud
-GL.VIEW(
+Visualization.VIEW(
     [
-    Visualization.points_color_from_rgb(PC.coordinates,PC.rgbs)
+    Visualization.points(PC.coordinates,PC.rgbs)
     ]
 )
 
@@ -24,9 +24,9 @@ all_files = FileManager.get_all_values(sub_trie)
 PC = FileManager.las2pointcloud(all_files...)
 
 # part of point cloud
-GL.VIEW(
+Visualization.VIEW(
     [
-    Visualization.points_color_from_rgb(PC.coordinates,PC.rgbs)
+    Visualization.points(PC.coordinates,PC.rgbs)
     ]
 )
 
@@ -39,9 +39,9 @@ all_files = FileManager.get_all_values(cut_trie)
 PC = FileManager.las2pointcloud(all_files...)
 
 # first level of detail of point cloud
-GL.VIEW(
+Visualization.VIEW(
     [
-    Visualization.points_color_from_rgb(PC.coordinates,PC.rgbs)
+    Visualization.points(PC.coordinates,PC.rgbs)
     ]
 )
 
@@ -60,8 +60,8 @@ all_files = FileManager.get_all_values(cut_trie)
 PC = FileManager.las2pointcloud(all_files...)
 
 # root of potree
-GL.VIEW(
+Visualization.VIEW(
     [
-    Visualization.points_color_from_rgb(PC.coordinates,PC.rgbs)
+    Visualization.points(PC.coordinates,PC.rgbs)
     ]
 )
