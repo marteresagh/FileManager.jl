@@ -35,9 +35,9 @@ version = "0.5.1"
 
 [[ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
-git-tree-sha1 = "5402b5674b3068ca570771c11da9a57bfa70acd4"
+git-tree-sha1 = "a66109c73612c63b10923ac446fddb0f0d21a593"
 uuid = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
-version = "0.9.39"
+version = "0.9.40"
 
 [[CodecBzip2]]
 deps = ["Bzip2_jll", "Libdl", "TranscodingStreams"]
@@ -59,7 +59,7 @@ version = "0.10.12"
 
 [[Common]]
 deps = ["Delaunay", "LinearAlgebra", "QHull", "SparseArrays"]
-git-tree-sha1 = "199866d41203b9b54ec814e9711e3ad061c86686"
+git-tree-sha1 = "8be6f2eebe3cb091a4422a3c85b70e8951b96da1"
 repo-rev = "master"
 repo-url = "https://github.com/marteresagh/Common.jl"
 uuid = "1e120bc2-2bd2-483a-9663-793997b3971f"
@@ -145,9 +145,9 @@ version = "2.1.5+1"
 
 [[FileIO]]
 deps = ["Pkg", "Requires", "UUIDs"]
-git-tree-sha1 = "c72c8977c378c4aacb52664f96253d7b7e97558b"
+git-tree-sha1 = "b647ed22f176a4f12eabe2afd90d19a95af2e8ca"
 uuid = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
-version = "1.7.0"
+version = "1.8.0"
 
 [[FixedPointNumbers]]
 deps = ["Statistics"]
@@ -181,9 +181,9 @@ version = "0.8.4"
 
 [[HTTP]]
 deps = ["Base64", "Dates", "IniFile", "MbedTLS", "NetworkOptions", "Sockets", "URIs"]
-git-tree-sha1 = "dc076fd92090242237cfbd5d7c76f52fb157fda5"
+git-tree-sha1 = "0e67ed09b3d89a28bb804ef5b886499f3a40a0cb"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
-version = "0.9.6"
+version = "0.9.7"
 
 [[IniFile]]
 deps = ["Test"]
@@ -236,10 +236,10 @@ uuid = "8372b9c3-1e34-5cc3-bfab-1a98e101de11"
 version = "3.4.3+0"
 
 [[LasIO]]
-deps = ["ColorTypes", "Dates", "FileIO", "FixedPointNumbers", "GeometryTypes", "Mmap"]
-git-tree-sha1 = "ac629f141feb057377e37f6b2ac7ac86841add82"
+deps = ["ColorTypes", "Dates", "FileIO", "FixedPointNumbers", "GeometryTypes", "Mmap", "Printf"]
+git-tree-sha1 = "0a10e33e8c9c1bdd8a320eead485a730be8ba86f"
 uuid = "570499db-eae3-5eb6-bdd5-a5326f375e68"
-version = "0.3.6"
+version = "0.3.7"
 
 [[LazIO]]
 deps = ["Dates", "FileIO", "FixedPointNumbers", "LASzip_jll", "LasIO", "Libdl", "Parameters", "Tables", "Test"]
