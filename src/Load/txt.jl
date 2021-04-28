@@ -1,9 +1,9 @@
 """
-	load_segment(filename::String) -> Lar.LAR
+	load_segment(filename::String) -> LAR
 
 Return segment from file.
 """
-function load_segment(filename::String)::Lar.LAR
+function load_segment(filename::String)::LAR
     io = open(filename, "r")
     LINES = readlines(io)
     close(io)
@@ -16,11 +16,11 @@ function load_segment(filename::String)::Lar.LAR
 end
 
 """
-	load_points(filename::String) -> Lar.Points
+	load_points(filename::String) -> Points
 
 Return points from file.
 """
-function load_points(filename::String)::Lar.Points
+function load_points(filename::String)::Points
     io = open(filename, "r")
     point = readlines(io)
     close(io)
@@ -31,11 +31,11 @@ function load_points(filename::String)::Lar.Points
 end
 
 """
-	load_cells(filename::String) -> Lar.Cells
+	load_cells(filename::String) -> Cells
 
 Return cells from file.
 """
-function load_cells(filename::String)::Lar.Cells
+function load_cells(filename::String)::Cells
     io = open(filename, "r")
     cells = readlines(io)
     close(io)
@@ -58,11 +58,11 @@ end
 # end
 
 # """
-# 	load_connected_components(filename::String) -> Lar.Cells
+# 	load_connected_components(filename::String) -> Cells
 #
 # Load edges.
 # """
-# function load_connected_components(filename::String)::Lar.Cells
+# function load_connected_components(filename::String)::Cells
 # 	EV = Array{Int64,1}[]
 # 	io = open(filename, "r")
 #     string_conn_comps = readlines(io)
