@@ -145,9 +145,9 @@ version = "2.1.5+1"
 
 [[FileIO]]
 deps = ["Pkg", "Requires", "UUIDs"]
-git-tree-sha1 = "b647ed22f176a4f12eabe2afd90d19a95af2e8ca"
+git-tree-sha1 = "9ce1309b1fa7fec0ef9e7c4f14f3be2cabf9bb73"
 uuid = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
-version = "1.8.0"
+version = "1.8.1"
 
 [[FixedPointNumbers]]
 deps = ["Statistics"]
