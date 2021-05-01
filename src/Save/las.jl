@@ -93,11 +93,12 @@ end
 """
 create a new point record for las file.
 """
-function newPointRecord(laspoint::LasIO.LasPoint, header::LasIO.LasHeader, type::DataType, mainHeader::LasIO.LasHeader)
+function newPointRecord(laspoint::LasIO.LasPoint, header::LasIO.LasHeader, type::DataType, mainHeader::LasIO.LasHeader; affineMatrix = Matrix{Float64}(Common.I,4,4))
 
-	x = LasIO.xcoord(xcoord(laspoint,header),mainHeader)
-	y = LasIO.ycoord(ycoord(laspoint,header),mainHeader)
-	z = LasIO.zcoord(zcoord(laspoint,header),mainHeader)
+	point = Common.apply_matrix(affineMatrix,[xcoord(laspoint,header), ycoord(laspoint,header), zcoord(laspoint,header)])
+	x = LasIO.xcoord(point[1],mainHeader)
+	y = LasIO.ycoord(point[2],mainHeader)
+	z = LasIO.zcoord(point[3],mainHeader)
 	intensity = laspoint.intensity
 	flag_byte = laspoint.flag_byte
 	raw_classification = laspoint.raw_classification
