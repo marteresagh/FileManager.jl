@@ -2,11 +2,11 @@
     workdir = dirname(dirname(pathof(FileManager)))
     # test_file = joinpath(BASE_FOLDER, "data", "file.txt")
 
-    potreeLAS = joinpath(workdir,"Files/stairsLAS")
-    potreeLAZ = joinpath(workdir,"Files/stairsLAZ")
+    potreeLAS = joinpath(workdir,"test","Files/stairsLAS")
+    potreeLAZ = joinpath(workdir,"test","Files/stairsLAZ")
 
-    oneNodeLAS = joinpath(workdir,"Files/stairsLAS/data/r/r0.las")
-    oneNodeLAZ = joinpath(workdir,"Files/stairsLAZ/data/r/r0.laz")
+    oneNodeLAS = joinpath(workdir,"test","Files/stairsLAS/data/r/r0.las")
+    oneNodeLAZ = joinpath(workdir,"test","Files/stairsLAZ/data/r/r0.laz")
 
     totalNodes = 71 # aka number of files
     maxDepth = 3    # depth of the tree
