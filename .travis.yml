@@ -1,0 +1,16 @@
+language: julia
+
+os:
+  - osx
+
+julia:
+  - 1.6
+
+branches:
+  only:
+    - master
+
+notifications:
+  email: false
+
+coveralls: true
