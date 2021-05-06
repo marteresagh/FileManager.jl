@@ -1,6 +1,6 @@
 @testset "LAS" begin
-    workdir = dirname(@__FILE__)
-    file = joinpath(workdir,"Files/PC.las")
+    workdir = dirname(dirname(pathof(FileManager)))
+    file = joinpath(workdir,"test","Files/PC.las")
     @show file
     PC = FileManager.PointCloud(rand(3,100),LasIO.FixedPointNumbers.N0f16.(rand(3,100)))
     FileManager.save_pointcloud(file, PC,  "TEST")

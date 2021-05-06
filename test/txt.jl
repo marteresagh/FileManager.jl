@@ -1,12 +1,12 @@
-workdir = dirname(@__FILE__)
+workdir = dirname(dirname(pathof(FileManager)))
 
 @testset "TXT" begin
     V = [0. 4. 4. 0. 2. 3. 3. 2;
     0. 0. 4. 4. 2. 2. 3. 3.]
     EV = [[1,2],[2,3],[3,4],[4,1],[5,6],[6,7],[7,8],[8,5]]
 
-    file_V = joinpath(workdir,"Files/V.txt")
-    file_EV = joinpath(workdir,"Files/EV.txt")
+    file_V = joinpath(workdir,"test","Files/V.txt")
+    file_EV = joinpath(workdir,"test","Files/EV.txt")
     FileManager.save_points_txt(file_V, V)
     FileManager.save_cells_txt(file_EV, EV)
 
