@@ -1,5 +1,6 @@
 @testset "Potree" begin
-    workdir = dirname(@__FILE__)
+    workdir = dirname(dirname(pathof(FileManager)))
+    # test_file = joinpath(BASE_FOLDER, "data", "file.txt")
 
     potreeLAS = joinpath(workdir,"Files/stairsLAS")
     potreeLAZ = joinpath(workdir,"Files/stairsLAZ")
