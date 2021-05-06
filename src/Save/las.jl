@@ -3,15 +3,15 @@ const DATA_OFFSET = 227
 const SIZE_DATARECORD = 26
 
 
-"""
-save file .las
-"""
-function save_new_las(filename::String,h::LasIO.LasHeader,p::LasIO.Array{LasPoint,1})
-    if ispath(filename) #overwrite
-        rm(filename)
-    end
-    LasIO.FileIO.save(filename,h,p)
-end
+# """
+# save file .las
+# """
+# function save_new_las(filename::String,h::LasIO.LasHeader,p::LasIO.Array{LasPoint,1})
+#     if ispath(filename) #overwrite
+#         rm(filename)
+#     end
+#     LasIO.FileIO.save(filename,h,p)
+# end
 
 
 """

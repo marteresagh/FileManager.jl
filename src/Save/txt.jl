@@ -42,6 +42,31 @@ function save_cells_txt(filename::String,EV::Cells)
 
 	close(io)
 end
+
+"""
+Save point cloud by row: "x y z r g b".
+"""
+function save_points_rgbs_txt(filename::String, PC::PointCloud)
+	io = open(filename,"w")
+	RGB = convert(Array{Int32,2},floor.(PC.rgbs*255))
+	for i in 1:PC.n_points
+		V = PC.coordinates
+		for j in 1:PC.dimension
+			write(io, "$(V[j,i]) ")
+		end
+		for j in 1:3
+			if j == 3
+				write(io, "$(RGB[j,i])")
+			else
+				write(io, "$(RGB[j,i]) ")
+			end
+		end
+		write(io, "\n")
+	end
+
+	close(io)
+end
+
 #
 # """
 # Save extrema points of segment by row.
@@ -70,31 +95,6 @@ end
 #
 # 	close(io)
 # end
-
-
-"""
-Save point cloud by row: "x y z r g b".
-"""
-function save_points_rgbs_txt(filename::String, PC::PointCloud)
-	io = open(filename,"w")
-	RGB = convert(Array{Int32,2},floor.(PC.rgbs*255))
-	for i in 1:PC.n_points
-		V = PC.coordinates
-		for j in 1:PC.dimension
-			write(io, "$(V[j,i]) ")
-		end
-		for j in 1:3
-			if j == 3
-				write(io, "$(RGB[j,i])")
-			else
-				write(io, "$(RGB[j,i]) ")
-			end
-		end
-		write(io, "\n")
-	end
-
-	close(io)
-end
 
 
 #

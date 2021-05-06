@@ -122,6 +122,19 @@ function get_files(trie::DataStructures.Trie{String}, LOD::Int, data=String[]::A
 	return data
 end
 
+"""
+Accumulate all values of leaf nodes.
+"""
+function get_leaf(trie::DataStructures.Trie{String},  data=String[]::Array{String,1})
+    if length(trie.children) == 0
+    	return push!(data,trie.value)
+    else
+		for key in collect(keys(trie.children))
+			get_leaf(trie.children[key],data)
+		end
+    end
+	return data
+end
 
 # """
 # Trie DFS.
