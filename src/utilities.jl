@@ -106,9 +106,9 @@ end
 """
 	successful(test::Bool,folder::String; message=""::String)
 """
-function successful(test::Bool,folder::String; message=""::String)
+function successful(test::Bool,folder::String; message=""::String, filename = "execution.probe")
 	if test
-		io = open(joinpath(folder,"execution.probe"),"w")
+		io = open(joinpath(folder,filename),"w")
 		write(io, message)
 		close(io)
 	end
