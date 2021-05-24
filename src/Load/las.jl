@@ -35,7 +35,11 @@ end
 Return LAS file's bounding box.
 """
 function las2aabb(file::String)::AABB
-	header, p = read_LAS_LAZ(file)
+	header = nothing
+	open(file,"r") do s
+	  LasIO.skiplasf(s)
+	  header = read(s, LasHeader)
+	end
 	#header = LasIO.read(fname, LasIO.LasHeader)
 	aabb = LasIO.boundingbox(header)
 	return AABB(aabb.xmax, aabb.xmin, aabb.ymax, aabb.ymin, aabb.zmax, aabb.zmin)
