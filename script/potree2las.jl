@@ -46,6 +46,7 @@ function main()
 	node_files = FileManager.get_all_values(trie)
 
 	# creo l'header
+	pointsProcessed = 0
 	mainHeader = FileManager.newHeader(aabb,"Potree2Las",FileManager.SIZE_DATARECORD,n_points)
 	# apro il las
 	t = open(output,"w")
@@ -58,6 +59,10 @@ function main()
 					plas = FileManager.newPointRecord(laspoint,h,FileManager.LasIO.LasPoint2,mainHeader)
 					write(t,plas) # write this record on temporary file
 					flush(t)
+					pointsProcessed += 1
+					if pointsProcessed % 1_000_000 == 0
+						println("$pointsProcessed points processed of $n_points")
+					end
 				end
 			close(s)
 		end
