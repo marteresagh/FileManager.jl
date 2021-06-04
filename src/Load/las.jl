@@ -6,14 +6,38 @@ using PyCall
 Read more than one file `.las` and extrapolate the LAR model and the color of each point.
 """
 function las2pointcloud(fnames::String...)::PointCloud
+	py"""
+	import pylas
+	import numpy as np
+
+	def ReadLas(file):
+		las = pylas.read(file)
+		return las
+
+	"""
+
 	Vtot = Array{Float64,2}(undef, 3, 0)
 	rgbtot = Array{LasIO.N0f16,2}(undef, 3, 0)
 	for fname in fnames
-		V = las2larpoints(fname)
-		rgb = las2color(fname)
+		las = py"ReadLas"(fname)
+		x = las.x
+		y = las.y
+		z = las.z
+		V = vcat(x',y',z')
 		Vtot = hcat(Vtot,V)
+		
+		type_id = las.point_format.id
+		if type_id != 0 && type_id != 1  && type_id != 4  && type_id != 6  && type_id != 9
+			r = las.red
+			g = las.green
+			b = las.blue
+			rgb =  vcat(r',g',b')
+		else
+			rgb = Array{LasIO.N0f16,2}(undef, 3, 0)
+		end
 		rgbtot = hcat(rgbtot,rgb)
 	end
+
 	return PointCloud(Vtot,rgbtot)
 end
 
@@ -23,7 +47,6 @@ end
 Return coordinates of points in LAS file.
 """
 function las2larpoints(file::String)
-	# default: 3cm distance threshold
 	py"""
 	import pylas
 	import numpy as np
@@ -69,7 +92,6 @@ end
 Return color, rgb, associated to each point in LAS file.
 """
 function las2color(file::String)
-	# default: 3cm distance threshold
 	py"""
 	import pylas
 	import numpy as np
@@ -79,29 +101,33 @@ function las2color(file::String)
 		return las
 
 	"""
-
 	las = py"ReadLas"(file)
-	r = las.red
-	g = las.green
-	b = las.blue
-	return vcat(r',g',b')
-end
-
-"""
-	color(p::LasPoint, header::LasHeader)
-
-Return color of one point in LAS file.
-"""
-function color(p::LasPoint, header::LasHeader)
-	type = LasIO.pointformat(header)
-	if type != LasPoint0 && type != LasPoint1
-		r = LasIO.ColorTypes.red(p)
-		g = LasIO.ColorTypes.green(p)
-		b = LasIO.ColorTypes.blue(p)
+	type_id = las.point_format.id
+	if type_id != 0 && type_id != 1  && type_id != 4  && type_id != 6  && type_id != 9
+		r = las.red
+		g = las.green
+		b = las.blue
 		return vcat(r',g',b')
+	else
+		return rgbtot = Array{LasIO.N0f16,2}(undef, 3, 0)
 	end
-	return rgbtot = Array{LasIO.N0f16,2}(undef, 3, 0)
 end
+
+# """
+# 	color(p::LasPoint, header::LasHeader)
+#
+# Return color of one point in LAS file.
+# """
+# function color(p::LasPoint, header::LasHeader)
+# 	type = LasIO.pointformat(header)
+# 	if type != LasPoint0 && type != LasPoint1
+# 		r = LasIO.ColorTypes.red(p)
+# 		g = LasIO.ColorTypes.green(p)
+# 		b = LasIO.ColorTypes.blue(p)
+# 		return vcat(r',g',b')
+# 	end
+# 	return rgbtot = Array{LasIO.N0f16,2}(undef, 3, 0)
+# end
 
 """
 	 xyz(p::LasPoint, h::LasHeader)
