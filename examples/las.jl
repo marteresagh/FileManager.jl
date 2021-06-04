@@ -20,4 +20,4 @@ end
 
 file = raw"C:\Users\marte\Documents\GEOWEB\TEST\REGISTRATION\TEST_casaletto.las"
 P = readlas(file)
-PC = FileManager.las2pointcloud(file) #119.670 ms
+@btime PC = FileManager.las2pointcloud(file) #119.670 ms
