@@ -1,3 +1,5 @@
+using PyCall
+
 """
 	las2pointcloud(fnames::String...) -> PointCloud
 
@@ -20,12 +22,22 @@ end
 
 Return coordinates of points in LAS file.
 """
-function las2larpoints(file::String)::Points
-	header, laspoints = read_LAS_LAZ(file)
-	npoints = length(laspoints)
-	x = [LasIO.xcoord(laspoints[k], header) for k in 1:npoints]
-	y = [LasIO.ycoord(laspoints[k], header) for k in 1:npoints]
-	z = [LasIO.zcoord(laspoints[k], header) for k in 1:npoints]
+function las2larpoints(file::String)
+	# default: 3cm distance threshold
+	py"""
+	import pylas
+	import numpy as np
+
+	def ReadLas(file):
+		las = pylas.read(file)
+		return las
+
+	"""
+
+	las = py"ReadLas"(file)
+	x = las.x
+	y = las.y
+	z = las.z
 	return vcat(x',y',z')
 end
 
@@ -56,17 +68,23 @@ end
 
 Return color, rgb, associated to each point in LAS file.
 """
-function las2color(file::String)::Points
-	header, laspoints =  read_LAS_LAZ(file)
-	npoints = length(laspoints)
-	type = LasIO.pointformat(header)
-	if type != LasPoint0 && type != LasPoint1
-		r = LasIO.ColorTypes.red.(laspoints)
-		g = LasIO.ColorTypes.green.(laspoints)
-		b = LasIO.ColorTypes.blue.(laspoints)
-		return vcat(r',g',b')
-	end
-	return rgbtot = Array{LasIO.N0f16,2}(undef, 3, 0)
+function las2color(file::String)
+	# default: 3cm distance threshold
+	py"""
+	import pylas
+	import numpy as np
+
+	def ReadLas(file):
+		las = pylas.read(file)
+		return las
+
+	"""
+
+	las = py"ReadLas"(file)
+	r = las.red
+	g = las.green
+	b = las.blue
+	return vcat(r',g',b')
 end
 
 """
