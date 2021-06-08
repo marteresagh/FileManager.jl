@@ -19,5 +19,19 @@ function readlas(file::String)
 end
 
 file = raw"C:\Users\marte\Documents\GEOWEB\TEST\REGISTRATION\TEST_casaletto.las"
-P = readlas(file)
+las = readlas(file)
 @btime PC = FileManager.las2pointcloud(file) #119.670 ms
+
+function las2aabb(file::String)::AABB
+	py"""
+	import pylas
+
+	def ReadHeader(file)
+		with fs.open(file, 'rb') as f:
+	     print(f.header.x_max)
+	"""
+
+	py"ReadHeader"(file)
+	
+	return AABB(aabb.xmax, aabb.xmin, aabb.ymax, aabb.ymin, aabb.zmax, aabb.zmin)
+end

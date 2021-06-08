@@ -17,7 +17,7 @@ function las2pointcloud(fnames::String...)::PointCloud
 	"""
 
 	Vtot = Array{Float64,2}(undef, 3, 0)
-	rgbtot = Array{LasIO.N0f16,2}(undef, 3, 0)
+	rgbtot = Array{UInt16,2}(undef, 3, 0)
 	for fname in fnames
 		las = py"ReadLas"(fname)
 		x = las.x
@@ -25,20 +25,21 @@ function las2pointcloud(fnames::String...)::PointCloud
 		z = las.z
 		V = vcat(x',y',z')
 		Vtot = hcat(Vtot,V)
-		
+
 		type_id = las.point_format.id
 		if type_id != 0 && type_id != 1  && type_id != 4  && type_id != 6  && type_id != 9
 			r = las.red
 			g = las.green
 			b = las.blue
 			rgb =  vcat(r',g',b')
+
 		else
-			rgb = Array{LasIO.N0f16,2}(undef, 3, 0)
+			rgb = Array{UInt16,2}(undef, 3, 0)
 		end
 		rgbtot = hcat(rgbtot,rgb)
 	end
 
-	return PointCloud(Vtot,rgbtot)
+	return PointCloud(Vtot, float.(rgbtot)/(2^16-1))
 end
 
 """
@@ -70,20 +71,23 @@ end
 Return LAS file's bounding box.
 """
 function las2aabb(file::String)::AABB
-	header = nothing
-	open(file,"r") do s
-	  LasIO.skiplasf(s)
-	  header = read(s, LasHeader)
-	end
-	#header = LasIO.read(fname, LasIO.LasHeader)
-	aabb = LasIO.boundingbox(header)
-	return AABB(aabb.xmax, aabb.xmin, aabb.ymax, aabb.ymin, aabb.zmax, aabb.zmin)
+	py"""
+	import pylas
+
+	def ReadHeader(file):
+		with pylas.open(file) as f:
+			return f.header.x_max,f.header.x_min,f.header.y_max,f.header.y_min,f.header.z_max,f.header.z_min
+	"""
+
+	aabb = py"ReadHeader"(file)
+
+	return AABB(aabb...)
 end
 
-function las2aabb(header::LasHeader)::AABB
-	aabb = LasIO.boundingbox(header)
-	return AABB(aabb.xmax, aabb.xmin, aabb.ymax, aabb.ymin, aabb.zmax, aabb.zmin)
-end
+# function las2aabb(header::LasHeader)::AABB
+# 	aabb = LasIO.boundingbox(header)
+# 	return AABB(aabb.xmax, aabb.xmin, aabb.ymax, aabb.ymin, aabb.zmax, aabb.zmin)
+# end
 
 
 """
