@@ -31,6 +31,7 @@ function las2pointcloud(fnames::String...)::PointCloud
 		V = vcat(x',y',z')
 
 		# RGB
+		type = LasIO.pointformat(header)
 		rgb = Array{LasIO.N0f16,2}(undef, 3, 0)
 		if type != LasPoint0 && type != LasPoint1
 			r = LasIO.ColorTypes.red.(laspoints)
