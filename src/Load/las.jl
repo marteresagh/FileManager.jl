@@ -15,6 +15,38 @@ function las2pointcloud(fnames::String...)::PointCloud
 	return PointCloud(Vtot,rgbtot)
 end
 
+
+function las2pointcloud(fnames::String...)::PointCloud
+	Vtot = Array{Float64,2}(undef, 3, 0)
+	rgbtot = Array{LasIO.N0f16,2}(undef, 3, 0)
+
+	for fname in fnames
+		header, laspoints = read_LAS_LAZ(fname)
+		npoints = length(laspoints)
+
+		# COORDS
+		x = [LasIO.xcoord(laspoints[k], header) for k in 1:npoints]
+		y = [LasIO.ycoord(laspoints[k], header) for k in 1:npoints]
+		z = [LasIO.zcoord(laspoints[k], header) for k in 1:npoints]
+		V = vcat(x',y',z')
+
+		# RGB
+		rgb = Array{LasIO.N0f16,2}(undef, 3, 0)
+		if type != LasPoint0 && type != LasPoint1
+			r = LasIO.ColorTypes.red.(laspoints)
+			g = LasIO.ColorTypes.green.(laspoints)
+			b = LasIO.ColorTypes.blue.(laspoints)
+			rgb = vcat(r',g',b')
+		end
+
+		Vtot = hcat(Vtot,V)
+		rgbtot = hcat(rgbtot,rgb)
+	end
+
+	return PointCloud(Vtot,rgbtot)
+end
+
+
 """
 	las2larpoints(file::String) -> Points
 
