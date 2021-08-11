@@ -13,9 +13,7 @@ println("packages OK")
 Return collection of potree directories.
 """
 function get_potree_dirs(txtpotreedirs::String)
-    @show txtpotreedirs
     if isfile(txtpotreedirs)
-        @show "sono qui"
         return FileManager.readlines(txtpotreedirs)
     elseif isdir(txtpotreedirs)
         return [txtpotreedirs]
