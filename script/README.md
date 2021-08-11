@@ -10,6 +10,7 @@ Convert potree projects into one single LAS file.
 
 #### Output:
   - `output.las`: point cloud converted
+  - `execution.probe`: success file
 
 #### Options:
 ```
