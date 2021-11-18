@@ -119,7 +119,7 @@ function main()
     end
 
     close(t)
-    FileManager.successful(true, splitdir(output)[1])
+    FileManager.successful(true, splitdir(output)[1]; message="points: $n_points_total")
 end
 
 @time main()
