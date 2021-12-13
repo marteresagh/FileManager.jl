@@ -80,7 +80,7 @@ Get point cloud from source.
 function source2pc(source::String, lod=0::Int64)
 
 	if isdir(source) # se source è un potree
-		flushprintln("Read data from: Potree struct")
+		println("Read data from: Potree struct")
 		cloud_metadata = CloudMetadata(source)
 
 		if lod == -1
@@ -96,7 +96,7 @@ function source2pc(source::String, lod=0::Int64)
 		end
 
 	elseif isfile(source) # se source è un file
-		flushprintln("Read data from: Single file")
+		println("Read data from: Single file")
 		PC = FileManager.las2pointcloud(source)
 		return PC
 	end

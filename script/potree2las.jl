@@ -46,14 +46,14 @@ function main()
     output = args["output"]
 
     sources = get_potree_dirs(txtpotreedirs)
-    flushprintln("")
-    flushprintln("== PARAMETERS ==")
+    println("")
+    println("== PARAMETERS ==")
 
     for i in eachindex(sources)
         println("source[$i]: $(sources[i])")
     end
 
-    flushprintln("Output  =>  $output")
+    println("Output  =>  $output")
 
     # creo l'header: mi serve il bb che contiene tutto il modello e il numero di punti totali
     full_aabb = AABB()
@@ -65,14 +65,14 @@ function main()
         n_points_total += cloudmetadata.points
     end
 
-    flushprintln("")
-    flushprintln("AABB:")
-    flushprintln("min: [$(full_aabb.x_min),$(full_aabb.y_min),$(full_aabb.z_min)]")
-    flushprintln("max: [$(full_aabb.x_max),$(full_aabb.y_max),$(full_aabb.z_max)]")
-
-    flushprintln("")
-    flushprintln("Points: $n_points_total")
-
+    println("")
+    println("AABB:")
+    println("min: [$(full_aabb.x_min),$(full_aabb.y_min),$(full_aabb.z_min)]")
+    println("max: [$(full_aabb.x_max),$(full_aabb.y_max),$(full_aabb.z_max)]")
+    flush(stdout)
+    println("")
+    println("Points: $n_points_total")
+    flush(stdout)
     mainHeader = FileManager.newHeader(
         full_aabb,
         "Potree2Las",
@@ -83,9 +83,11 @@ function main()
     t = open(output, "w")
     write(t, FileManager.LasIO.magic(FileManager.LasIO.format"LAS"))
     write(t, mainHeader)
+    flush(t)
 
-    flushprintln("")
-    flushprintln("== PROCESSING ==")
+    println("")
+    println("== PROCESSING ==")
+
     # per ogni potree
     for potree in sources
         pointsProcessed = 0
@@ -107,19 +109,21 @@ function main()
                     mainHeader,
                 )
                 write(t, plas) # write this record on temporary file
-                flush(t)
+
                 pointsProcessed += 1
-                if pointsProcessed % 1_000_000 == 0
-                    println("$pointsProcessed points processed of $n_points")
-                end
+                # if pointsProcessed % 1_000_000 == 0
+                #     println("$pointsProcessed points processed of $n_points")
+                # end
             end
             close(s)
+            flush(t)
+
         end
 
     end
 
     close(t)
-    FileManager.successful(true, splitdir(output)[1]; message="points: $n_points_total")
+    FileManager.successful(true, splitdir(output)[1]; message="{\n\"points\": $n_points_total\n}")
 end
 
 @time main()
