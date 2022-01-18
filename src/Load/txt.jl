@@ -3,7 +3,7 @@
 
 Return segment from file.
 """
-function load_segment(filename::String)::LAR
+function load_segment(filename::String)::Common.LAR
     io = open(filename, "r")
     LINES = readlines(io)
     close(io)
