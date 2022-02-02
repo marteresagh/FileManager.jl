@@ -57,23 +57,23 @@ end
 #     return hyperplane
 # end
 
-# """
-# 	load_connected_components(filename::String) -> Cells
-#
-# Load edges.
-# """
-# function load_connected_components(filename::String)::Cells
-# 	EV = Array{Int64,1}[]
-# 	io = open(filename, "r")
-#     string_conn_comps = readlines(io)
-#     close(io)
-#
-# 	conn_comps = [tryparse.(Float64,split(string_conn_comps[i], " ")) for i in 1:length(string_conn_comps)]
-# 	for comp in conn_comps
-# 		for i in 1:(length(comp)-1)
-# 			push!(EV, [comp[i],comp[i+1]])
-# 		end
-# 		push!(EV,[comp[end],comp[1]])
-# 	end
-# 	return EV
-# end
+"""
+	load_connected_components(filename::String) -> Cells
+
+Load edges.
+"""
+function load_connected_components(filename::String)::Cells
+	EV = Array{Int64,1}[]
+	io = open(filename, "r")
+    string_conn_comps = readlines(io)
+    close(io)
+
+	conn_comps = [tryparse.(Float64,split(string_conn_comps[i], " ")) for i in 1:length(string_conn_comps)]
+	for comp in conn_comps
+		for i in 1:(length(comp)-1)
+			push!(EV, [comp[i],comp[i+1]])
+		end
+		push!(EV,[comp[end],comp[1]])
+	end
+	return EV
+end
