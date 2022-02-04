@@ -64,3 +64,28 @@
 # 	doc.saveas(filename)
 #
 # end
+
+
+#
+# function faces2dxf(candidate_points, triangles, regions, filename)
+#
+# 	ezdxf = pyimport("ezdxf")
+# 	doc = ezdxf.new()
+# 	msp = doc.modelspace()
+#
+# 	for i in 1:length(regions)
+# 		str_layer = "PLANE_$i"
+# 		doc.layers.add(name = "$str_layer", color=rand(1:254))
+# 		region = regions[i]
+# 		faces = triangles[region]
+# 		for face in faces
+# 			points = candidate_points[:,face]
+# 			points_array = [c[:] for c in eachcol(points)]
+# 			msp.add_3dface(points_array, dxfattribs=py"{'layer': $str_layer}"o)
+# 		end
+# 		println("regione $i fatta")
+# 	end
+#
+# 	doc.saveas(filename)
+#
+# end
