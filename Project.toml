@@ -14,7 +14,6 @@ Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
 [compat]
 Common = "^0.1.0"
-FileManager = "^0.1.0"
 DataStructures = "^0.18.9"
 JSON = "^0.21.1"
 LasIO = "^0.3.7"
