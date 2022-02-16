@@ -10,8 +10,15 @@ Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 LasIO = "570499db-eae3-5eb6-bdd5-a5326f375e68"
 LazIO = "c3605908-9f0f-11e8-0a72-0d361c15a277"
-PlyIO = "42171d58-473b-503a-8d5f-782019eb09ec"
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
+[compat]
+Common = "^0.1.0"
+FileManager = "^0.1.0"
+DataStructures = "^0.18.9"
+JSON = "^0.21.1"
+LasIO = "^0.3.7"
+LazIO = "^0.3.3"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

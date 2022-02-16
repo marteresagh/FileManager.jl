@@ -1,22 +1,22 @@
 
-
-"""
-Save file .JSON of the boundingbox in path.
-"""
-function save_AABB2json(folder::String, aabb::AABB)
-	@assert isdir(folder) "save_AABB2json: $path not a valid directory"
-	name = splitdir(folder)[2]
-	filename = name*".json"
-	scale = DataStructures.OrderedDict{String,Any}("x"=>aabb.x_max-aabb.x_min, "y"=>aabb.y_max-aabb.y_min, "z"=>aabb.z_max-aabb.z_min)
-	position = DataStructures.OrderedDict{String,Any}("x"=>(aabb.x_max+aabb.x_min)/2, "y"=>(aabb.y_max+aabb.y_min)/2, "z"=>(aabb.z_max+aabb.z_min)/2)
-	rotation = DataStructures.OrderedDict{String,Any}("x"=>0., "y"=>0., "z"=>0.)
-	data = DataStructures.OrderedDict{String,Any}("clip"=>true, "name"=>name,
-			"scale"=>scale,"position"=>position,"rotation"=>rotation,
-			"permitExtraction"=>true)
-	open(joinpath(folder,filename),"w") do f
-  		JSON.print(f, data,4)
-	end
-end
+#
+# """
+# Save file .JSON of the boundingbox in path.
+# """
+# function save_AABB2json(folder::String, aabb::AABB)
+# 	@assert isdir(folder) "save_AABB2json: $path not a valid directory"
+# 	name = splitdir(folder)[2]
+# 	filename = name*".json"
+# 	scale = DataStructures.OrderedDict{String,Any}("x"=>aabb.x_max-aabb.x_min, "y"=>aabb.y_max-aabb.y_min, "z"=>aabb.z_max-aabb.z_min)
+# 	position = DataStructures.OrderedDict{String,Any}("x"=>(aabb.x_max+aabb.x_min)/2, "y"=>(aabb.y_max+aabb.y_min)/2, "z"=>(aabb.z_max+aabb.z_min)/2)
+# 	rotation = DataStructures.OrderedDict{String,Any}("x"=>0., "y"=>0., "z"=>0.)
+# 	data = DataStructures.OrderedDict{String,Any}("clip"=>true, "name"=>name,
+# 			"scale"=>scale,"position"=>position,"rotation"=>rotation,
+# 			"permitExtraction"=>true)
+# 	open(joinpath(folder,filename),"w") do f
+#   		JSON.print(f, data,4)
+# 	end
+# end
 
 
 

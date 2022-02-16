@@ -2,17 +2,17 @@ __precompile__()
 
 module FileManager
 
+	# using PlyIO
+	# using PyCall
     using Common
 	import Common.AABB,Common.Cells,Common.Points,Common.Point
 	import Common.getmodel
     using LasIO
     using LazIO
     using JSON
-	using PlyIO
 	using DataStructures
 	using Dates
 	using Printf
-	using PyCall
 
 	# util
 	include("struct.jl")
