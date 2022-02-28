@@ -66,7 +66,7 @@ struct CloudMetadata
 
     function CloudMetadata(path::String)
         dict = Dict{String,Any}[]
-        open(path * "\\cloud.js", "r") do f
+        open(joinpath(path, "cloud.js"), "r") do f
             dict = JSON.parse(f)  # parse and transform data
         end
         version = dict["version"]
