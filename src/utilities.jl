@@ -159,7 +159,7 @@ function checkPotreeFolder(potree::String)
 end
 
 """
-	createProbe(destination_dir::String, name::String, ts::Int, te::Int, input::OrderedDict, data::OrderedDict)
+	createProbe(destination_dir::String, name::String, ts::DateTime, te::DateTime, input::DataStructures.OrderedDict, data::DataStructures.OrderedDict)
 
 Check if the given Potree folder exists.
 """
