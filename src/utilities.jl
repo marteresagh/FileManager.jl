@@ -131,3 +131,48 @@ end
 # 	V,EV,FV = json2LARvolume(volume)
 # 	return V,EV,FV
 # end
+
+
+
+"""
+	createDestinationDir(folder::String, project_name::String)
+
+Create a new folder `project_name` in `folder`.
+"""
+function createDirProject(destination_dir::String, project_name::String)
+	@assert isdir(destination_dir) "[createDirProject] $folder not an existing folder"
+	proj_folder = joinpath(folder,project_name)
+	mkdir(proj_folder)
+	return proj_folder
+end
+
+
+
+"""
+	checkPotreeFolder(potree::String)
+
+Check if the given Potree folder exists.
+"""
+function checkPotreeFolder(potree::String)
+	@assert isdir(potree) && isfile(joinpath(potree,"cloud.js")) "[checkPotreeFolder] $potree not a Potree project"
+	return true
+end
+
+"""
+	createProbe(destination_dir::String, name::String, ts::Int, te::Int, input::OrderedDict, data::OrderedDict)
+
+Check if the given Potree folder exists.
+"""
+function createProbe(destination_dir::String, name::String, ts::DateTime, te::DateTime, input::DataStructures.OrderedDict, data::DataStructures.OrderedDict)
+	@assert isdir(destination_dir) "[createProbe] $destination_dir not existing folder"
+
+	filename = "execution.probe"
+
+	probe = DataStructures.OrderedDict{String,Any}("name"=>name,
+			"time_start"=>ts,"time_end"=>te,"input"=>input,
+			"data"=>data)
+
+	open(joinpath(destination_dir,filename),"w") do f
+  		JSON.print(f, probe, 4)
+	end
+end
