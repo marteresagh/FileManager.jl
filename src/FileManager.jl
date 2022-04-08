@@ -19,7 +19,7 @@ module FileManager
 	include("utilities.jl")
 
 	# save
-	# include("Save/json.jl")
+	include("Save/json.jl")
 	include("Save/las.jl")
 	# include("Save/ply.jl")
 	include("Save/txt.jl")
