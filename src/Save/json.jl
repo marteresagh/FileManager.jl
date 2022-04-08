@@ -16,7 +16,7 @@ function volume2json(filename::String, volume::Volume)
     )
     data = DataStructures.OrderedDict{String,Any}(
         "clip" => true,
-        "name" => "extracting slice",
+        "name" => "volume",
         "scale" => scale,
         "position" => position,
         "rotation" => rotation,
