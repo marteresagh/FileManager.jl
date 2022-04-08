@@ -1,4 +1,34 @@
 
+function volume2json(filename::String, volume::Volume)
+    scale = DataStructures.OrderedDict{String,Any}(
+        "x" => slice.scale[1],
+        "y" => slice.scale[2],
+        "z" => slice.scale[3],
+    )
+    position = DataStructures.OrderedDict{String,Any}(
+        "x" => slice.position[1],
+        "y" => slice.position[2],
+        "z" => slice.position[3],
+    )
+    rotation = DataStructures.OrderedDict{String,Any}(
+        "x" => slice.rotation[1],
+        "y" => slice.rotation[2],
+        "z" => slice.rotation[3],
+    )
+    data = DataStructures.OrderedDict{String,Any}(
+        "clip" => true,
+        "name" => "extracting slice",
+        "scale" => scale,
+        "position" => position,
+        "rotation" => rotation,
+        "permitExtraction" => true,
+    )
+    open(filename, "w") do f
+        JSON.print(f, data, 4)
+    end
+end
+
+
 #
 # """
 # Save file .JSON of the boundingbox in path.
