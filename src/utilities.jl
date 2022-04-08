@@ -140,8 +140,8 @@ end
 Create a new folder `project_name` in `folder`.
 """
 function createDirProject(destination_dir::String, project_name::String)
-	@assert isdir(destination_dir) "[createDirProject] $folder not an existing folder"
-	proj_folder = joinpath(folder,project_name)
+	@assert isdir(destination_dir) "[createDirProject] $destination_dir not an existing folder"
+	proj_folder = joinpath(destination_dir,project_name)
 	mkdir(proj_folder)
 	return proj_folder
 end
