@@ -1,18 +1,18 @@
 function volume2json(filename::String, volume::Volume)
     scale = DataStructures.OrderedDict{String,Any}(
-        "x" => slice.scale[1],
-        "y" => slice.scale[2],
-        "z" => slice.scale[3],
+        "x" => volume.scale[1],
+        "y" => volume.scale[2],
+        "z" => volume.scale[3],
     )
     position = DataStructures.OrderedDict{String,Any}(
-        "x" => slice.position[1],
-        "y" => slice.position[2],
-        "z" => slice.position[3],
+        "x" => volume.position[1],
+        "y" => volume.position[2],
+        "z" => volume.position[3],
     )
     rotation = DataStructures.OrderedDict{String,Any}(
-        "x" => slice.rotation[1],
-        "y" => slice.rotation[2],
-        "z" => slice.rotation[3],
+        "x" => volume.rotation[1],
+        "y" => volume.rotation[2],
+        "z" => volume.rotation[3],
     )
     data = DataStructures.OrderedDict{String,Any}(
         "clip" => true,
