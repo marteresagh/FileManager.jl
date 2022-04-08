@@ -1,4 +1,3 @@
-
 function volume2json(filename::String, volume::Volume)
     scale = DataStructures.OrderedDict{String,Any}(
         "x" => slice.scale[1],
