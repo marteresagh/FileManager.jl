@@ -163,7 +163,7 @@ end
 
 Check if the given Potree folder exists.
 """
-function createProbe(destination_dir::String, name::String, ts::DateTime, te::DateTime, input::DataStructures.OrderedDict, data::DataStructures.OrderedDict; version="2.0"::String)
+function createProbe(version::String, destination_dir::String, name::String, ts::DateTime, te::DateTime, input::DataStructures.OrderedDict, data::DataStructures.OrderedDict)
 	@assert isdir(destination_dir) "[createProbe] $destination_dir not existing folder"
 
 	filename = "execution.probe"
