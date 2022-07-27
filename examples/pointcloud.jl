@@ -2,6 +2,7 @@ using FileManager
 using Visualization
 using Common
 
+## descrizione degli octree relativi ai file che gli passo
 function view_octree(files, affineMatrix)
     mesh = []
     for file in files
@@ -14,17 +15,20 @@ function view_octree(files, affineMatrix)
     return mesh
 end
 
-potree = "D:/potreeDirectory/pointclouds/CASALETTO"
+potree = raw"D:\potreeDirectory\pointclouds\CUPOLA"
 cloudMets = FileManager.CloudMetadata(potree)
 
 vector_t = [cloudMets.boundingBox.x_min,cloudMets.boundingBox.y_min,cloudMets.boundingBox.z_min]
 
 trie = FileManager.potree2trie(potree)
 max_level = FileManager.max_depth(trie)
-files = FileManager.get_files_in_potree_folder(potree,0, false)
+files = FileManager.get_files_in_potree_folder(potree, 5, false)
 leaves = FileManager.get_leaf(trie)
 # PC = FileManager.las2pointcloud(files...)
 affineMatrix = Common.t(-vector_t...)
 
-mesh = view_octree(files,affineMatrix)
+mesh = view_octree(leaves,affineMatrix)
+# V,EV,FV = Common.getmodel(cloudMets.boundingBox)
+# push!(mesh,Visualization.GLGrid(Common.apply_matrix(affineMatrix,V),EV,Visualization.COLORS[3]))
+
 Visualization.VIEW(mesh)

@@ -12,8 +12,7 @@ function potree2trie(potree::String)
 
 	trie = DataStructures.Trie{String}()
 
-	println(" ")
-	println("Search in $tree")
+	@debug "Search in potree folder" tree
 
 	# search all files
 	if metadata.pointAttributes == "LAS"

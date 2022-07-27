@@ -69,22 +69,49 @@ struct CloudMetadata
         open(joinpath(path, "cloud.js"), "r") do f
             dict = JSON.parse(f)  # parse and transform data
         end
+
+        @assert haskey(dict, "version") "cloud.js: version key not found"
+        @assert haskey(dict, "octreeDir") "cloud.js: octreeDir key not found"
+        @assert haskey(dict, "projection") "cloud.js: projection key not found"
+        @assert haskey(dict, "points") "cloud.js: points key not found"
+        @assert haskey(dict, "boundingBox") "cloud.js: boundingBox key not found"
+        @assert haskey(dict, "tightBoundingBox") "cloud.js: tightBoundingBox key not found"
+        @assert haskey(dict, "pointAttributes") "cloud.js: pointAttributes key not found"
+        @assert haskey(dict, "spacing") "cloud.js: spacing key not found"
+        @assert haskey(dict, "scale") "cloud.js: scale key not found"
+        @assert haskey(dict, "hierarchyStepSize") "cloud.js: hierarchyStepSize key not found"
+
         version = dict["version"]
-        if version == "1.7"
-            octreeDir = dict["octreeDir"]
-            projection = dict["projection"]
-            points = dict["points"]
-            dictAABB = dict["boundingBox"]
-            dicttightBB = dict["tightBoundingBox"]
-            boundingBox = AABB(dictAABB["ux"],dictAABB["lx"],dictAABB["uy"],dictAABB["ly"],dictAABB["uz"],dictAABB["lz"])
-            tightBoundingBox = AABB(dicttightBB["ux"],dicttightBB["lx"],dicttightBB["uy"],dicttightBB["ly"],dicttightBB["uz"],dicttightBB["lz"])
+        @assert version == "1.7" || version == "1.8" "cloud.js: not compatible version, 1.7 or 1.8 required"
 
-            pointAttributes = dict["pointAttributes"]
-            spacing = dict["spacing"]
-            scale = dict["scale"]
-            hierarchyStepSize = dict["hierarchyStepSize"]
+        octreeDir = dict["octreeDir"]
+        projection = dict["projection"]
+        points = dict["points"]
+        dictAABB = dict["boundingBox"]
+        dicttightBB = dict["tightBoundingBox"]
+        boundingBox = AABB(
+            dictAABB["ux"],
+            dictAABB["lx"],
+            dictAABB["uy"],
+            dictAABB["ly"],
+            dictAABB["uz"],
+            dictAABB["lz"],
+        )
+        tightBoundingBox = AABB(
+            dicttightBB["ux"],
+            dicttightBB["lx"],
+            dicttightBB["uy"],
+            dicttightBB["ly"],
+            dicttightBB["uz"],
+            dicttightBB["lz"],
+        )
 
-            new(
+        pointAttributes = dict["pointAttributes"]
+        spacing = dict["spacing"]
+        scale = dict["scale"]
+        hierarchyStepSize = dict["hierarchyStepSize"]
+
+        new(
             version,
             octreeDir,
             projection,
@@ -94,9 +121,9 @@ struct CloudMetadata
             pointAttributes,
             spacing,
             scale,
-            Int32(hierarchyStepSize)
-            )
-        end
+            Int32(hierarchyStepSize),
+        )
+
     end
 
 end
