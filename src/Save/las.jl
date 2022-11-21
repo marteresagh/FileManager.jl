@@ -95,7 +95,7 @@ create a new point record for las file.
 """
 function newPointRecord(laspoint::LasIO.LasPoint, header::LasIO.LasHeader, type::DataType, mainHeader::LasIO.LasHeader; affineMatrix = Matrix{Float64}(Common.I,4,4))
 
-	point = Common.apply_matrix(affineMatrix,[xcoord(laspoint,header), ycoord(laspoint,header), zcoord(laspoint,header)])
+	point = Common.apply_matrix(affineMatrix,[LasIO.xcoord(laspoint,header), LasIO.ycoord(laspoint,header), LasIO.zcoord(laspoint,header)])
 	x = LasIO.xcoord(point[1],mainHeader)
 	y = LasIO.ycoord(point[2],mainHeader)
 	z = LasIO.zcoord(point[3],mainHeader)
@@ -145,7 +145,7 @@ function newPointRecord(laspoint::LasIO.LasPoint, header::LasIO.LasHeader, type:
 end
 
 
-function newPointRecord(point::Array{Float64,1}, rgb::Array{LasIO.N0f16,1} , type::LasIO.DataType, mainHeader::LasIO.LasHeader) #crea oggetto laspoint con vertici e colori
+function newPointRecord(point::Point, rgb::Array{LasIO.N0f16,1} , type::LasIO.DataType, mainHeader::LasIO.LasHeader) #crea oggetto laspoint con vertici e colori
 
 	x = LasIO.xcoord(point[1],mainHeader)
 	y = LasIO.ycoord(point[2],mainHeader)
@@ -203,7 +203,7 @@ function save_pointcloud(filename::String, pc::PointCloud,  software::String)
 	if pc.dimension == 2
 		points = vcat(pc.coordinates,zeros(pc.n_points)')
 	else
-		points = pc.coordinates
+		points = pc.coordinates # .+pc.offset
 	end
 
 	rgbs = pc.rgbs

@@ -15,6 +15,26 @@ function load_segment(filename::String)::Common.LAR
     return V,EV
 end
 
+
+"""
+	load_segment(filename::String) -> LAR
+
+Return segment from file.
+"""
+function load_segment2lines(filename::String)::Vector{Common.Line}
+    io = open(filename, "r")
+    LINES = readlines(io)
+    close(io)
+
+	setLines = Common.Line[]
+ 	for i in 1:length(LINES)
+	    extremaPoints = tryparse.(Float64,split(LINES[i], " "))
+	   	line = Common.Line(extremaPoints[1:2], extremaPoints[3:4])
+		push!(setLines, line)
+	end
+    return setLines
+end
+
 """
 	load_points(filename::String) -> Points
 

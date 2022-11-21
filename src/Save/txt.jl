@@ -50,7 +50,10 @@ function save_points_rgbs_txt(filename::String, PC::PointCloud)
 	io = open(filename,"w")
 	RGB = convert(Array{Int32,2},floor.(PC.rgbs*255))
 	for i in 1:PC.n_points
-		V = PC.coordinates
+		V =  trunc.(PC.coordinates, digits= 3)
+		if size(V,1) == 3
+			V = trunc.( V.+PC.offset, digits= 3)
+		end
 		for j in 1:PC.dimension
 			write(io, "$(V[j,i]) ")
 		end
